@@ -12,6 +12,195 @@
     content="Credibles Inc. is an AI-powered cybersecurity company building autonomous vulnerability detection, analysis, and fixing for websites, apps, and digital infrastructure."
   />
   <style>
+    .demo-shell {
+  margin-top: 20px;
+  padding: 22px;
+  border-radius: 28px;
+  background: rgba(255,255,255,0.72);
+  border: 1px solid rgba(0,0,0,0.05);
+  box-shadow: 0 20px 60px rgba(0,0,0,0.08);
+  backdrop-filter: blur(18px);
+}
+
+.demo-top {
+  text-align: center;
+  margin-bottom: 16px;
+}
+
+.demo-input-wrap {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+  flex-wrap: wrap;
+  margin-bottom: 12px;
+}
+
+.demo-input,
+.demo-select {
+  min-height: 50px;
+  padding: 0 16px;
+  border-radius: 14px;
+  border: 1px solid #d2d2d7;
+  background: white;
+  font-size: 15px;
+  color: #1d1d1f;
+}
+
+.demo-input {
+  min-width: 260px;
+}
+
+.demo-select {
+  min-width: 190px;
+}
+
+.demo-note {
+  margin: 0;
+  color: #6e6e73;
+  font-size: 14px;
+}
+
+.demo-status {
+  text-align: center;
+  font-weight: 700;
+  color: #1d1d1f;
+  margin: 18px 0 10px;
+}
+
+.demo-dashboard {
+  margin-top: 18px;
+}
+
+.demo-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 18px;
+  margin-bottom: 18px;
+}
+
+.demo-card {
+  background: rgba(255,255,255,0.88);
+  border-radius: 24px;
+  border: 1px solid rgba(0,0,0,0.05);
+  box-shadow: 0 12px 34px rgba(0,0,0,0.06);
+  padding: 24px;
+}
+
+.demo-label {
+  font-size: 13px;
+  font-weight: 700;
+  color: #6e6e73;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  margin-bottom: 8px;
+}
+
+.demo-big-number {
+  font-size: 48px;
+  line-height: 1;
+  letter-spacing: -0.05em;
+  font-weight: 800;
+  margin-bottom: 8px;
+}
+
+.demo-big-text {
+  font-size: 34px;
+  line-height: 1.05;
+  letter-spacing: -0.04em;
+  font-weight: 800;
+  margin-bottom: 8px;
+}
+
+.demo-small {
+  color: #6e6e73;
+  font-size: 14px;
+}
+
+.critical { color: #dc2626; }
+.high { color: #ea580c; }
+.medium { color: #ca8a04; }
+.low { color: #2563eb; }
+.protected { color: #16a34a; }
+
+.demo-results {
+  display: grid;
+  grid-template-columns: 1.2fr 0.8fr;
+  gap: 18px;
+}
+
+.demo-results-left,
+.demo-results-right {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.vuln-card h3,
+.report-title {
+  margin: 0 0 8px;
+  font-size: 22px;
+  line-height: 1.15;
+  letter-spacing: -0.02em;
+}
+
+.vuln-header {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  align-items: flex-start;
+}
+
+.vuln-meta {
+  margin: 0;
+  color: #6e6e73;
+  font-size: 15px;
+}
+
+.severity {
+  display: inline-block;
+  min-width: 82px;
+  text-align: center;
+  padding: 8px 12px;
+  border-radius: 999px;
+  font-size: 13px;
+  font-weight: 700;
+  background: #f5f5f7;
+}
+
+.vuln-actions {
+  margin-top: 16px;
+}
+
+.report-row {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 10px 0;
+  border-bottom: 1px solid #ececf1;
+  font-size: 15px;
+}
+
+.report-row:last-child {
+  border-bottom: none;
+}
+
+.plan-features {
+  margin: 0;
+  padding-left: 18px;
+  color: #2f2f33;
+  font-size: 15px;
+}
+
+.final-btn {
+  margin-top: 18px;
+}
+
+@media (max-width: 1040px) {
+  .demo-grid,
+  .demo-results {
+    grid-template-columns: 1fr;
+  }
+}
     :root {
       --bg: #f5f5f7;
       --bg-2: #ffffff;
@@ -809,6 +998,164 @@
         <a href="mailto:credibles.inc@gmail.com?subject=Join%20the%20Credibles%20Waitlist" class="btn btn-secondary">Join Waitlist</a>
       </div>
     </section>
+ <section class="section reveal" id="demo">
+  <h2 class="section-title">Interactive Demo</h2>
+  <p class="section-subtitle">
+    Experience how Credibles AI scans, classifies, fixes, and reports vulnerabilities in real time.
+  </p>
+
+  <div class="demo-shell">
+    <div class="demo-top">
+      <div class="demo-input-wrap">
+        <input id="urlInput" class="demo-input" type="text" placeholder="Enter your website URL..." />
+        <select id="planSelect" class="demo-select">
+          <option value="starter">Starter • $49/mo</option>
+          <option value="growth">Growth • $249/mo</option>
+          <option value="enterprise">Enterprise • $1000/mo</option>
+        </select>
+        <button onclick="startScan()" class="btn btn-primary">Run Demo Scan</button>
+      </div>
+      <p class="demo-note">
+        Concept preview only. This interactive demo shows how the Credibles platform experience could work.
+      </p>
+    </div>
+
+    <div id="scanStatus" class="demo-status">Ready to scan.</div>
+
+    <div id="dashboard" class="demo-dashboard" style="display:none;">
+      <div class="demo-grid">
+        <div class="demo-card score-card">
+          <div class="demo-label">Security Score</div>
+          <div id="securityScore" class="demo-big-number">42</div>
+          <div class="demo-small">before automated fixes</div>
+        </div>
+
+        <div class="demo-card">
+          <div class="demo-label">Risk Level</div>
+          <div id="riskLevel" class="demo-big-text critical">Critical</div>
+          <div class="demo-small">based on detected issues</div>
+        </div>
+
+        <div class="demo-card">
+          <div class="demo-label">Active Vulnerabilities</div>
+          <div id="vulnCount" class="demo-big-number">6</div>
+          <div class="demo-small">detected across target system</div>
+        </div>
+      </div>
+
+      <div class="demo-results">
+        <div class="demo-results-left">
+          <div class="demo-card vuln-card">
+            <div class="vuln-header">
+              <div>
+                <h3>SQL Injection</h3>
+                <p class="vuln-meta">Login endpoint vulnerable to database manipulation.</p>
+              </div>
+              <span class="severity critical">Critical</span>
+            </div>
+            <div class="vuln-actions">
+              <button onclick="fixVuln(this, 'sql')" class="btn btn-secondary">Auto Fix</button>
+            </div>
+          </div>
+
+          <div class="demo-card vuln-card">
+            <div class="vuln-header">
+              <div>
+                <h3>Cross-Site Scripting</h3>
+                <p class="vuln-meta">Unsanitized user input detected in public form.</p>
+              </div>
+              <span class="severity high">High</span>
+            </div>
+            <div class="vuln-actions">
+              <button onclick="fixVuln(this, 'xss')" class="btn btn-secondary">Auto Fix</button>
+            </div>
+          </div>
+
+          <div class="demo-card vuln-card">
+            <div class="vuln-header">
+              <div>
+                <h3>Broken Access Control</h3>
+                <p class="vuln-meta">Unauthorized access path found for admin resource.</p>
+              </div>
+              <span class="severity high">High</span>
+            </div>
+            <div class="vuln-actions">
+              <button onclick="fixVuln(this, 'bac')" class="btn btn-secondary">Auto Fix</button>
+            </div>
+          </div>
+
+          <div class="demo-card vuln-card plan-growth plan-enterprise">
+            <div class="vuln-header">
+              <div>
+                <h3>Path Traversal</h3>
+                <p class="vuln-meta">Improper file path validation may expose sensitive resources.</p>
+              </div>
+              <span class="severity medium">Medium</span>
+            </div>
+            <div class="vuln-actions">
+              <button onclick="fixVuln(this, 'pt')" class="btn btn-secondary">Auto Fix</button>
+            </div>
+          </div>
+
+          <div class="demo-card vuln-card plan-enterprise">
+            <div class="vuln-header">
+              <div>
+                <h3>Threat Intelligence Alert</h3>
+                <p class="vuln-meta">Emerging exploit pattern matched against external threat database.</p>
+              </div>
+              <span class="severity medium">Medium</span>
+            </div>
+            <div class="vuln-actions">
+              <button onclick="fixVuln(this, 'ti')" class="btn btn-secondary">Auto Fix</button>
+            </div>
+          </div>
+
+          <div class="demo-card vuln-card plan-enterprise">
+            <div class="vuln-header">
+              <div>
+                <h3>Compliance Gap</h3>
+                <p class="vuln-meta">Missing security control affecting audit readiness and reporting.</p>
+              </div>
+              <span class="severity low">Low</span>
+            </div>
+            <div class="vuln-actions">
+              <button onclick="fixVuln(this, 'cg')" class="btn btn-secondary">Auto Fix</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="demo-results-right">
+          <div class="demo-card">
+            <h3 class="report-title">Live Report</h3>
+            <div class="report-row"><span>Plan</span><strong id="reportPlan">Starter</strong></div>
+            <div class="report-row"><span>Target</span><strong id="reportTarget">example.com</strong></div>
+            <div class="report-row"><span>Detection</span><strong>Complete</strong></div>
+            <div class="report-row"><span>Risk Score</span><strong id="reportRisk">Critical</strong></div>
+            <div class="report-row"><span>Resolved</span><strong id="resolvedCount">0 / 3</strong></div>
+            <div class="report-row"><span>Compliance</span><strong id="complianceText">Basic security summary</strong></div>
+          </div>
+
+          <div class="demo-card">
+            <h3 class="report-title">Included In Your Plan</h3>
+            <ul id="planFeatures" class="plan-features">
+              <li>Basic vulnerability detection</li>
+              <li>Severity classification</li>
+              <li>Core security summary</li>
+            </ul>
+          </div>
+
+          <div class="demo-card final-report" id="finalReportBox" style="display:none;">
+            <h3 class="report-title">Post-Fix Summary</h3>
+            <div class="report-row"><span>Updated Score</span><strong id="finalScore">91</strong></div>
+            <div class="report-row"><span>Updated Level</span><strong id="finalLevel">Low Risk</strong></div>
+            <div class="report-row"><span>Status</span><strong>System stabilized</strong></div>
+            <a href="mailto:credibles.inc@gmail.com?subject=Join%20the%20Credibles%20Waitlist" class="btn btn-primary final-btn">Join Waitlist</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
   </main>
 
   <footer class="footer">
@@ -824,6 +1171,146 @@
 
     document.querySelectorAll(".reveal").forEach((el) => observer.observe(el));
   </script>
+<script>
+  let activePlan = "starter";
+  let totalFixable = 3;
+  let fixedCount = 0;
+
+  const planData = {
+    starter: {
+      label: "Starter • $49/mo",
+      risk: "Critical",
+      score: 42,
+      total: 3,
+      compliance: "Basic security summary",
+      features: [
+        "Basic vulnerability detection",
+        "Severity classification",
+        "Core security summary"
+      ],
+      visibleClasses: ["starter", "growth", "enterprise"]
+    },
+    growth: {
+      label: "Growth • $249/mo",
+      risk: "High",
+      score: 58,
+      total: 4,
+      compliance: "Advanced monitoring summary",
+      features: [
+        "Continuous monitoring",
+        "Expanded attack vector coverage",
+        "Advanced threat detection",
+        "Enhanced reporting"
+      ],
+      visibleClasses: ["growth", "enterprise"]
+    },
+    enterprise: {
+      label: "Enterprise • $1000/mo",
+      risk: "High",
+      score: 64,
+      total: 6,
+      compliance: "Compliance reporting: GDPR, ISO 27001, SOC 2",
+      features: [
+        "Automated vulnerability fixing",
+        "Threat intelligence integration",
+        "Compliance reporting",
+        "Continuous monitoring",
+        "Priority support",
+        "Advanced enterprise security workflows"
+      ],
+      visibleClasses: ["enterprise"]
+    }
+  };
+
+  function startScan() {
+    const target = document.getElementById("urlInput").value.trim() || "example.com";
+    activePlan = document.getElementById("planSelect").value;
+    const config = planData[activePlan];
+
+    fixedCount = 0;
+    totalFixable = config.total;
+
+    document.getElementById("scanStatus").innerText = "Scanning target...";
+    document.getElementById("dashboard").style.display = "none";
+    document.getElementById("finalReportBox").style.display = "none";
+
+    resetButtons();
+    updatePlanVisibility();
+
+    setTimeout(() => {
+      document.getElementById("scanStatus").innerText = "Scan complete. Vulnerabilities detected.";
+      document.getElementById("dashboard").style.display = "block";
+
+      document.getElementById("securityScore").innerText = config.score;
+      document.getElementById("riskLevel").innerText = config.risk;
+      document.getElementById("riskLevel").className = "demo-big-text " + config.risk.toLowerCase().replace(" ", "-");
+      document.getElementById("vulnCount").innerText = config.total;
+
+      document.getElementById("reportPlan").innerText = config.label;
+      document.getElementById("reportTarget").innerText = target;
+      document.getElementById("reportRisk").innerText = config.risk;
+      document.getElementById("resolvedCount").innerText = "0 / " + config.total;
+      document.getElementById("complianceText").innerText = config.compliance;
+
+      const featureList = document.getElementById("planFeatures");
+      featureList.innerHTML = "";
+      config.features.forEach(feature => {
+        const li = document.createElement("li");
+        li.innerText = feature;
+        featureList.appendChild(li);
+      });
+    }, 1700);
+  }
+
+  function updatePlanVisibility() {
+    const allPlanCards = document.querySelectorAll(".plan-growth, .plan-enterprise");
+    allPlanCards.forEach(card => card.style.display = "none");
+
+    if (activePlan === "growth") {
+      document.querySelectorAll(".plan-growth").forEach(card => card.style.display = "block");
+    }
+
+    if (activePlan === "enterprise") {
+      document.querySelectorAll(".plan-growth, .plan-enterprise").forEach(card => card.style.display = "block");
+    }
+  }
+
+  function resetButtons() {
+    document.querySelectorAll(".vuln-actions button").forEach(btn => {
+      btn.disabled = false;
+      btn.innerText = "Auto Fix";
+      btn.style.background = "";
+      btn.style.color = "";
+      btn.style.borderColor = "";
+    });
+  }
+
+  function fixVuln(button, vulnId) {
+    if (button.disabled) return;
+
+    button.disabled = true;
+    button.innerText = "Fixed";
+    button.style.background = "#16a34a";
+    button.style.color = "white";
+    button.style.borderColor = "#16a34a";
+
+    fixedCount += 1;
+    document.getElementById("resolvedCount").innerText = fixedCount + " / " + totalFixable;
+
+    if (fixedCount >= totalFixable) {
+      const finalScore = activePlan === "starter" ? 86 : activePlan === "growth" ? 91 : 96;
+      const finalLevel = activePlan === "starter" ? "Medium Risk" : activePlan === "growth" ? "Low Risk" : "Protected";
+
+      document.getElementById("finalScore").innerText = finalScore;
+      document.getElementById("finalLevel").innerText = finalLevel;
+      document.getElementById("finalReportBox").style.display = "block";
+      document.getElementById("scanStatus").innerText = "All visible issues resolved. Report updated.";
+      document.getElementById("securityScore").innerText = finalScore;
+      document.getElementById("riskLevel").innerText = finalLevel;
+      document.getElementById("riskLevel").className = "demo-big-text protected";
+    }
+  }
+</script>
 </body>
 </html>
 

@@ -1481,6 +1481,85 @@
       document.getElementById("riskLevel").className = "demo-big-text protected";
     }
   }
+const SCANNER_API_URL = "https://supreme-sniffle-4q6469vg4j6c7wwx-8000.app.github.dev/";
+
+const realScannerButton = document.getElementById("realScannerButton");
+const realScannerUrl = document.getElementById("realScannerUrl");
+const realScannerStatus = document.getElementById("realScannerStatus");
+const realScannerResults = document.getElementById("realScannerResults");
+
+function renderRealScannerResults(items) {
+  realScannerResults.innerHTML = "";
+
+  if (!Array.isArray(items) || items.length === 0) {
+    realScannerResults.innerHTML = `
+      <div class="credibles-live-scanner__result">
+        <div class="credibles-live-scanner__result-top">
+          <h3 class="credibles-live-scanner__result-title">No findings returned</h3>
+          <span class="credibles-live-scanner__pill low">Clear</span>
+        </div>
+        <p class="credibles-live-scanner__text">The scan completed but did not return visible issues.</p>
+      </div>
+    `;
+    return;
+  }
+
+  items.forEach((item) => {
+    const severityRaw = (item.severity || "Low").toString();
+    const severity = severityRaw.toLowerCase();
+
+    realScannerResults.innerHTML += `
+      <div class="credibles-live-scanner__result">
+        <div class="credibles-live-scanner__result-top">
+          <h3 class="credibles-live-scanner__result-title">${item.title || "Scanner Finding"}</h3>
+          <span class="credibles-live-scanner__pill ${severity}">${severityRaw}</span>
+        </div>
+        <p class="credibles-live-scanner__text">${item.summary || ""}</p>
+        ${item.details ? `<p class="credibles-live-scanner__text">${item.details}</p>` : ""}
+        ${item.recommendation ? `<p class="credibles-live-scanner__text"><strong>Recommendation:</strong> ${item.recommendation}</p>` : ""}
+      </div>
+    `;
+  });
+}
+
+async function runRealScanner() {
+  if (!realScannerUrl || !realScannerStatus || !realScannerResults) return;
+
+  const url = realScannerUrl.value.trim();
+
+  if (!url) {
+    realScannerStatus.textContent = "Please enter a website URL first.";
+    return;
+  }
+
+  realScannerStatus.textContent = "Running live scan...";
+  realScannerResults.innerHTML = "";
+
+  try {
+    const response = await fetch(SCANNER_API_URL, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({ url })
+    });
+
+    if (!response.ok) {
+      throw new Error(`Request failed with status ${response.status}`);
+    }
+
+    const data = await response.json();
+    realScannerStatus.textContent = `Scan complete. Score: ${data.score}/100 | Risk: ${data.risk_level}`;
+    renderRealScannerResults(data.results || []);
+  } catch (err) {
+    realScannerStatus.textContent = "Scanner request failed.";
+    console.error(err);
+  }
+}
+
+if (realScannerButton) {
+  realScannerButton.addEventListener("click", runRealScanner);
+}
 </script>
   <section class="credibles-live-scanner">
   <div class="credibles-live-scanner__wrap">

@@ -1209,6 +1209,85 @@
   </footer>
 
   <script>
+    <script>
+const SCANNER_API_URL = "https://supreme-sniffle-4q6469vg4j6c7wwx-8501.app.github.dev/scan";
+
+const realScannerButton = document.getElementById("realScannerButton");
+const realScannerUrl = document.getElementById("realScannerUrl");
+const realScannerStatus = document.getElementById("realScannerStatus");
+const realScannerResults = document.getElementById("realScannerResults");
+
+function renderScannerResults(results) {
+  realScannerResults.innerHTML = "";
+
+  if (!Array.isArray(results) || results.length === 0) {
+    realScannerResults.innerHTML = `
+      <div class="real-scan-result-card">
+        <div class="real-scan-result-top">
+          <h3 class="real-scan-result-title">No findings returned</h3>
+          <span class="real-scan-pill low">Clear</span>
+        </div>
+        <p class="real-scan-result-text">The scanner completed but did not return any visible issues.</p>
+      </div>
+    `;
+    return;
+  }
+
+  results.forEach((item) => {
+    const severity = (item.severity || "low").toString().toLowerCase();
+
+    realScannerResults.innerHTML += `
+      <div class="real-scan-result-card">
+        <div class="real-scan-result-top">
+          <h3 class="real-scan-result-title">${item.title || "Scanner Finding"}</h3>
+          <span class="real-scan-pill ${severity}">${item.severity || "Low"}</span>
+        </div>
+        <p class="real-scan-result-text">${item.summary || ""}</p>
+        <p class="real-scan-result-text">${item.details || ""}</p>
+        <p class="real-scan-result-text"><strong>Recommendation:</strong> ${item.recommendation || ""}</p>
+      </div>
+    `;
+  });
+}
+
+async function runRealScanner() {
+  const url = realScannerUrl.value.trim();
+
+  if (!url) {
+    realScannerStatus.textContent = "Please enter a website URL first.";
+    return;
+  }
+
+  realScannerStatus.textContent = "Running live scan...";
+  realScannerResults.innerHTML = "";
+
+  try {
+    const response = await fetch(SCANNER_API_URL, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({ url })
+    });
+
+    if (!response.ok) {
+      throw new Error(`Scanner request failed with status ${response.status}`);
+    }
+
+    const data = await response.json();
+
+    realScannerStatus.textContent = "Scan complete.";
+    renderScannerResults(data.results || data.issues || data.findings || []);
+  } catch (error) {
+    realScannerStatus.textContent = "Scanner request failed. Check the real endpoint path and CORS settings.";
+    console.error(error);
+  }
+}
+
+if (realScannerButton) {
+  realScannerButton.addEventListener("click", runRealScanner);
+}
+</script>
     const observer = new IntersectionObserver((entries) => {
       entries.forEach((entry) => {
         if (entry.isIntersecting) entry.target.classList.add("visible");

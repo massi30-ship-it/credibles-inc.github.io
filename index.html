@@ -5,6 +5,10 @@
 <head>
   <meta charset="UTF-8" />
   <link rel="stylesheet" href="style.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Credibles Inc. | Your Shield. Powered By AI.</title>
   <link rel="icon" type="image/png" href="favicon.png" />
@@ -1157,36 +1161,43 @@
     </div>
   </div>
 </section>
-<section class="scanner-prototype-section">
-  <div class="scanner-prototype-shell">
-    <div class="scanner-prototype-header">
-      <div>
-        <p class="scanner-prototype-kicker">REAL SCANNER PROTOTYPE</p>
-        <h2 class="scanner-prototype-title">Credibles Scanner v0.001</h2>
-        <p class="scanner-prototype-subtitle">
-          Live interactive scanner prototype embedded directly into the Credibles experience.
-        </p>
-      </div>
+<section class="real-scanner-section">
+  <div class="real-scanner-shell">
+    <div class="real-scanner-header">
+      <p class="real-scanner-kicker">REAL SCANNER PROTOTYPE</p>
+      <h2 class="real-scanner-title">Credibles Scanner v0.001</h2>
+      <p class="real-scanner-subtitle">
+        Run a live scan using the real Credibles scanner engine.
+      </p>
     </div>
 
-    <div class="scanner-prototype-frame">
-      <div class="scanner-browser-bar">
-        <span class="scanner-dot"></span>
-        <span class="scanner-dot"></span>
-        <span class="scanner-dot"></span>
-        <span class="scanner-url">
-          https://supreme-sniffle-4q6469vg4j6c7wwx-8501.app.github.dev/
-        </span>
+    <div class="real-scanner-card">
+      <div class="real-scanner-topbar">
+        <div class="real-scanner-dots">
+          <span></span>
+          <span></span>
+          <span></span>
+        </div>
+        <div class="real-scanner-label">Live scanner</div>
       </div>
 
-      <iframe
-        src="https://supreme-sniffle-4q6469vg4j6c7wwx-8501.app.github.dev/"
-        title="Credibles Scanner Prototype"
-        class="scanner-iframe"
-        loading="lazy"
-        referrerpolicy="strict-origin-when-cross-origin"
-        allow="clipboard-read; clipboard-write"
-      ></iframe>
+      <div class="real-scanner-controls">
+        <input
+          id="realScannerUrl"
+          class="real-scanner-input"
+          type="text"
+          placeholder="https://example.com"
+        />
+        <button id="realScannerButton" class="real-scanner-button">
+          Scan
+        </button>
+      </div>
+
+      <div id="realScannerStatus" class="real-scanner-status">
+        Enter a website URL and run the scanner.
+      </div>
+
+      <div id="realScannerResults" class="real-scanner-results"></div>
     </div>
   </div>
 </section>

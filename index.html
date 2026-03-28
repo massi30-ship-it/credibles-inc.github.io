@@ -1210,27 +1210,8 @@
 
   <script>
     <script>
-const SCANNER_API_URL = "https://supreme-sniffle-4q6469vg4j6c7wwx-8501.app.github.dev/scan";
-
-const realScannerButton = document.getElementById("realScannerButton");
-const realScannerUrl = document.getElementById("realScannerUrl");
-const realScannerStatus = document.getElementById("realScannerStatus");
-const realScannerResults = document.getElementById("realScannerResults");
-
-function renderScannerResults(results) {
-  realScannerResults.innerHTML = "";
-
-  if (!Array.isArray(results) || results.length === 0) {
-    realScannerResults.innerHTML = `
-      <div class="real-scan-result-card">
-        <div class="real-scan-result-top">
-          <h3 class="real-scan-result-title">No findings returned</h3>
-          <span class="real-scan-pill low">Clear</span>
-        </div>
-        <p class="real-scan-result-text">The scanner completed but did not return any visible issues.</p>
-      </div>
-    `;
-    return;
+ 
+      return;
   }
 
   results.forEach((item) => {

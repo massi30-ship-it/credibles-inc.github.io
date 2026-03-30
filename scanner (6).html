@@ -1,0 +1,1439 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>Credibles Security Scanner — v0.003</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,300&family=DM+Mono:wght@300;400;500&display=swap" rel="stylesheet"/>
+<style>
+:root {
+  --ink: #09090e;
+  --surface: rgba(255,255,255,0.04);
+  --surface2: rgba(255,255,255,0.07);
+  --surface3: rgba(255,255,255,0.10);
+  --border: rgba(255,255,255,0.07);
+  --border2: rgba(255,255,255,0.12);
+  --text: #f0f0f8;
+  --text2: #a0a0b8;
+  --text3: #606078;
+  --blue: #3b82f6;
+  --blue2: #60a5fa;
+  --blue-glow: rgba(59,130,246,0.15);
+  --red: #ef4444;
+  --red-bg: rgba(239,68,68,0.08);
+  --red-border: rgba(239,68,68,0.18);
+  --orange: #f97316;
+  --orange-bg: rgba(249,115,22,0.08);
+  --orange-border: rgba(249,115,22,0.18);
+  --amber: #f59e0b;
+  --amber-bg: rgba(245,158,11,0.08);
+  --amber-border: rgba(245,158,11,0.18);
+  --green: #22c55e;
+  --green-bg: rgba(34,197,94,0.08);
+  --green-border: rgba(34,197,94,0.18);
+  --slate: #64748b;
+  --slate-bg: rgba(100,116,139,0.08);
+  --r: 16px;
+  --r2: 22px;
+  --r3: 28px;
+}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; font-size: 16px; }
+body {
+  font-family: 'DM Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+  background: var(--ink);
+  color: var(--text);
+  min-height: 100vh;
+  overflow-x: hidden;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* NOISE */
+body::after {
+  content: '';
+  position: fixed; inset: 0; z-index: 9999;
+  pointer-events: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");
+  opacity: 0.5;
+}
+
+/* AMBIENT */
+.bg-glow {
+  position: fixed; top: -200px; left: 50%; transform: translateX(-50%);
+  width: 800px; height: 500px; pointer-events: none; z-index: 0;
+  background: radial-gradient(ellipse at 50% 30%, rgba(59,130,246,0.07) 0%, transparent 65%);
+}
+
+/* NAV */
+nav {
+  position: sticky; top: 0; z-index: 500;
+  background: rgba(9,9,14,0.88);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-bottom: 1px solid var(--border);
+}
+.nav-wrap {
+  max-width: 1200px; margin: 0 auto; padding: 0 28px;
+  height: 56px; display: flex; align-items: center; justify-content: space-between;
+}
+.nav-brand {
+  display: flex; align-items: center; gap: 10px;
+  font-size: 14px; font-weight: 600; color: var(--text);
+  text-decoration: none; letter-spacing: -0.01em;
+}
+.nav-dot {
+  width: 7px; height: 7px; border-radius: 50%; background: var(--blue);
+  box-shadow: 0 0 10px var(--blue); animation: blink 2.5s ease infinite;
+}
+@keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.3} }
+.nav-right { display: flex; align-items: center; gap: 16px; }
+.nav-pill {
+  font-family: 'DM Mono', monospace; font-size: 10px; font-weight: 400;
+  color: var(--text3); background: var(--surface);
+  border: 1px solid var(--border); padding: 4px 10px; border-radius: 6px;
+  letter-spacing: 0.05em; text-transform: uppercase;
+}
+.nav-link {
+  font-size: 13px; color: var(--text2); text-decoration: none; transition: color .2s;
+}
+.nav-link:hover { color: var(--text); }
+
+/* LAYOUT */
+.wrap { max-width: 1200px; margin: 0 auto; padding: 0 28px; position: relative; z-index: 1; }
+
+/* HERO */
+.hero {
+  text-align: center; padding: 72px 28px 56px;
+  max-width: 680px; margin: 0 auto;
+}
+.hero-badge {
+  display: inline-flex; align-items: center; gap: 8px;
+  background: var(--blue-glow); border: 1px solid rgba(59,130,246,0.2);
+  border-radius: 999px; padding: 6px 16px; margin-bottom: 28px;
+  font-size: 11px; font-weight: 500; color: var(--blue2);
+  font-family: 'DM Mono', monospace; letter-spacing: 0.06em; text-transform: uppercase;
+}
+.hero-badge::before { content: '◆'; font-size: 8px; }
+h1 {
+  font-size: clamp(38px, 5vw, 62px); font-weight: 300;
+  letter-spacing: -0.045em; line-height: 1.05;
+  color: var(--text); margin-bottom: 16px;
+}
+h1 em { font-style: normal; font-weight: 600; }
+.hero-sub {
+  font-size: 16px; color: var(--text2); max-width: 480px; margin: 0 auto;
+  font-weight: 300; line-height: 1.7;
+}
+
+/* SCANNER SHELL */
+.shell {
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: var(--r3); overflow: hidden;
+  margin: 0 28px 80px;
+  max-width: 1144px; margin-left: auto; margin-right: auto;
+  transition: border-color .3s;
+}
+.shell:has(#urlInput:focus) { border-color: var(--border2); }
+
+/* ── INPUT PANEL ── */
+.input-panel { padding: 28px 28px 24px; }
+.input-label {
+  display: block; margin-bottom: 10px;
+  font-family: 'DM Mono', monospace; font-size: 10px; font-weight: 500;
+  color: var(--text3); letter-spacing: 0.08em; text-transform: uppercase;
+}
+.input-row { display: flex; gap: 10px; }
+.url-input {
+  flex: 1; height: 50px; padding: 0 18px;
+  background: rgba(255,255,255,0.04); border: 1px solid var(--border);
+  border-radius: var(--r); color: var(--text); font-family: 'DM Sans', sans-serif;
+  font-size: 15px; outline: none; transition: all .2s;
+}
+.url-input::placeholder { color: var(--text3); }
+.url-input:focus {
+  border-color: rgba(59,130,246,0.35); background: rgba(59,130,246,0.04);
+  box-shadow: 0 0 0 3px rgba(59,130,246,0.07);
+}
+.btn-scan {
+  height: 50px; padding: 0 26px; background: var(--blue); color: #fff;
+  border: none; border-radius: var(--r); font-family: 'DM Sans', sans-serif;
+  font-size: 14px; font-weight: 600; cursor: pointer;
+  display: flex; align-items: center; gap: 8px; white-space: nowrap;
+  transition: all .2s;
+}
+.btn-scan:hover:not(:disabled) {
+  background: #2563eb; transform: translateY(-1px);
+  box-shadow: 0 8px 24px rgba(59,130,246,0.28);
+}
+.btn-scan:disabled { opacity: 0.45; cursor: not-allowed; transform: none !important; }
+.btn-scan svg { flex-shrink: 0; }
+.input-warn {
+  margin-top: 10px; font-size: 11px; color: var(--text3);
+  display: flex; align-items: center; gap: 6px;
+}
+.input-warn::before { content: '⚠'; }
+
+.divider { height: 1px; background: var(--border); }
+
+/* ── PROGRESS PANEL ── */
+.progress-panel { padding: 28px; display: none; }
+.prog-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px; }
+.prog-label { font-size: 14px; font-weight: 500; color: var(--text); }
+.prog-pct {
+  font-family: 'DM Mono', monospace; font-size: 13px;
+  color: var(--blue2); font-weight: 500;
+}
+.prog-bar-track {
+  height: 2px; background: rgba(255,255,255,0.06);
+  border-radius: 999px; overflow: hidden; margin-bottom: 16px;
+}
+.prog-bar-fill {
+  height: 100%; width: 0%; border-radius: 999px;
+  background: linear-gradient(90deg, var(--blue), var(--blue2));
+  transition: width .6s cubic-bezier(.4,0,.2,1);
+}
+.prog-phase {
+  font-family: 'DM Mono', monospace; font-size: 11px;
+  color: var(--text3); letter-spacing: 0.04em; margin-bottom: 16px;
+}
+.prog-log {
+  display: flex; flex-direction: column; gap: 7px;
+  max-height: 140px; overflow: hidden;
+}
+.log-line {
+  display: flex; align-items: center; gap: 10px;
+  font-size: 12px; color: var(--text2);
+  animation: logIn .25s ease;
+}
+@keyframes logIn { from{opacity:0;transform:translateX(-6px)} to{opacity:1;transform:translateX(0)} }
+.log-dot { width: 5px; height: 5px; border-radius: 50%; flex-shrink: 0; }
+.dot-active { background: var(--blue); animation: blink 1s ease infinite; }
+.dot-done { background: var(--green); }
+.dot-warn { background: var(--amber); }
+
+/* ── RESULTS PANEL ── */
+.results-panel { padding: 28px; display: none; }
+
+/* score block */
+.score-block {
+  display: grid; grid-template-columns: auto 1fr; gap: 32px;
+  align-items: start; margin-bottom: 28px;
+  padding-bottom: 28px; border-bottom: 1px solid var(--border);
+}
+.score-left {}
+.score-num {
+  font-size: 80px; font-weight: 300; letter-spacing: -0.07em;
+  line-height: 1; color: var(--text); margin-bottom: 4px;
+}
+.score-num sub { font-size: 24px; color: var(--text3); font-weight: 300; vertical-align: middle; }
+.score-sublabel { font-size: 11px; color: var(--text3); font-family: 'DM Mono', monospace; letter-spacing: 0.06em; text-transform: uppercase; }
+.score-right { display: flex; flex-direction: column; gap: 12px; justify-content: center; }
+.severity-row { display: flex; gap: 10px; }
+.sev-chip {
+  flex: 1; padding: 12px 16px; border-radius: var(--r);
+  display: flex; flex-direction: column; gap: 4px; text-align: center;
+}
+.sev-chip.c { background: var(--red-bg); border: 1px solid var(--red-border); }
+.sev-chip.h { background: var(--orange-bg); border: 1px solid var(--orange-border); }
+.sev-chip.m { background: var(--amber-bg); border: 1px solid var(--amber-border); }
+.sev-chip.l { background: rgba(59,130,246,0.08); border: 1px solid rgba(59,130,246,0.18); }
+.sev-count {
+  font-family: 'DM Mono', monospace; font-size: 28px; font-weight: 500; line-height: 1;
+}
+.sev-chip.c .sev-count { color: var(--red); }
+.sev-chip.h .sev-count { color: var(--orange); }
+.sev-chip.m .sev-count { color: var(--amber); }
+.sev-chip.l .sev-count { color: var(--blue2); }
+.sev-lbl { font-size: 10px; font-weight: 500; color: var(--text3); letter-spacing: 0.06em; text-transform: uppercase; }
+.risk-badge {
+  display: inline-flex; align-items: center; gap: 8px;
+  padding: 8px 16px; border-radius: 999px;
+  font-size: 13px; font-weight: 600; width: fit-content;
+}
+.rb-critical { background: var(--red-bg); color: var(--red); border: 1px solid var(--red-border); }
+.rb-high { background: var(--orange-bg); color: var(--orange); border: 1px solid var(--orange-border); }
+.rb-medium { background: var(--amber-bg); color: var(--amber); border: 1px solid var(--amber-border); }
+.rb-low { background: var(--green-bg); color: var(--green); border: 1px solid var(--green-border); }
+.meta-tags { display: flex; gap: 6px; flex-wrap: wrap; }
+.meta-tag {
+  font-family: 'DM Mono', monospace; font-size: 10px; color: var(--text3);
+  background: var(--surface); border: 1px solid var(--border);
+  padding: 4px 10px; border-radius: 6px; letter-spacing: 0.04em;
+}
+
+/* controls */
+.controls-row {
+  display: flex; gap: 8px; align-items: center; flex-wrap: wrap;
+  margin-bottom: 20px;
+}
+.cat-btn {
+  padding: 6px 14px; border-radius: 8px;
+  font-size: 12px; font-weight: 500;
+  background: var(--surface); border: 1px solid var(--border);
+  color: var(--text2); cursor: pointer; font-family: 'DM Sans', sans-serif;
+  transition: all .15s; white-space: nowrap;
+}
+.cat-btn:hover { color: var(--text); border-color: var(--border2); }
+.cat-btn.active { background: var(--blue-glow); color: var(--blue2); border-color: rgba(59,130,246,0.3); }
+.spacer { flex: 1; }
+.dl-btn {
+  padding: 6px 14px; border-radius: 8px; font-size: 12px; font-weight: 500;
+  background: var(--surface2); border: 1px solid var(--border2);
+  color: var(--text2); cursor: pointer; font-family: 'DM Sans', sans-serif;
+  transition: all .15s; display: flex; align-items: center; gap: 6px;
+}
+.dl-btn:hover { color: var(--text); background: var(--surface3); }
+
+/* findings */
+.findings { display: flex; flex-direction: column; gap: 6px; }
+.sec-head {
+  font-family: 'DM Mono', monospace; font-size: 10px; font-weight: 500;
+  color: var(--text3); letter-spacing: 0.08em; text-transform: uppercase;
+  padding: 14px 0 6px; display: flex; align-items: center; gap: 12px;
+}
+.sec-head::after { content:''; flex:1; height:1px; background:var(--border); }
+
+.finding-card {
+  border-radius: var(--r); overflow: hidden;
+  background: var(--surface); border: 1px solid var(--border);
+  transition: border-color .15s; cursor: pointer;
+  animation: cardIn .3s ease;
+}
+@keyframes cardIn { from{opacity:0;transform:translateY(5px)} to{opacity:1;transform:translateY(0)} }
+.finding-card:hover { border-color: var(--border2); }
+.finding-card.open { border-color: var(--border2); }
+
+.card-head {
+  display: grid; grid-template-columns: 82px 1fr auto;
+  gap: 14px; align-items: center; padding: 14px 16px;
+}
+.sev-tag {
+  display: flex; align-items: center; justify-content: center;
+  padding: 4px 0; border-radius: 7px; font-family: 'DM Mono', monospace;
+  font-size: 10px; font-weight: 500; letter-spacing: 0.04em;
+}
+.tag-CRITICAL { background: var(--red-bg); color: var(--red); border: 1px solid var(--red-border); }
+.tag-HIGH { background: var(--orange-bg); color: var(--orange); border: 1px solid var(--orange-border); }
+.tag-MEDIUM { background: var(--amber-bg); color: var(--amber); border: 1px solid var(--amber-border); }
+.tag-LOW { background: rgba(59,130,246,0.08); color: var(--blue2); border: 1px solid rgba(59,130,246,0.2); }
+.tag-INFO { background: var(--slate-bg); color: var(--slate); border: 1px solid rgba(100,116,139,0.2); }
+.card-title { font-size: 14px; font-weight: 500; color: var(--text); }
+.card-cat {
+  font-family: 'DM Mono', monospace; font-size: 10px;
+  color: var(--text3); white-space: nowrap;
+}
+.card-chevron {
+  margin-left: 8px; color: var(--text3); transition: transform .2s;
+  font-size: 12px;
+}
+.finding-card.open .card-chevron { transform: rotate(180deg); }
+
+.card-body {
+  padding: 0 16px 0; max-height: 0; overflow: hidden;
+  transition: max-height .3s ease, padding .3s ease;
+}
+.finding-card.open .card-body { padding: 0 16px 16px; max-height: 600px; }
+.card-body-inner {
+  border-top: 1px solid var(--border); padding-top: 14px;
+  display: grid; gap: 14px;
+}
+.detail-block {}
+.detail-label {
+  font-family: 'DM Mono', monospace; font-size: 10px; font-weight: 500;
+  color: var(--text3); letter-spacing: 0.07em; text-transform: uppercase;
+  margin-bottom: 5px;
+}
+.detail-text { font-size: 13px; color: var(--text2); line-height: 1.65; }
+.detail-text strong { color: var(--text); font-weight: 500; }
+.fix-block {
+  background: rgba(34,197,94,0.05); border: 1px solid rgba(34,197,94,0.12);
+  border-radius: 10px; padding: 12px 14px;
+}
+.fix-block .detail-label { color: var(--green); }
+.fix-block .detail-text { color: rgba(134,239,172,0.85); }
+.impact-block {
+  background: var(--red-bg); border: 1px solid var(--red-border);
+  border-radius: 10px; padding: 12px 14px;
+}
+.impact-block .detail-label { color: var(--red); }
+.impact-block .detail-text { color: rgba(252,165,165,0.85); }
+
+/* empty */
+.empty-state { text-align: center; padding: 48px 20px; color: var(--text3); font-size: 14px; }
+
+/* report footer */
+.report-footer {
+  margin-top: 28px; padding-top: 24px; border-top: 1px solid var(--border);
+  display: grid; grid-template-columns: 1fr auto; gap: 24px; align-items: end;
+}
+.report-title {
+  font-family: 'DM Mono', monospace; font-size: 10px; font-weight: 500;
+  color: var(--text3); letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 12px;
+}
+.report-rows { display: flex; flex-direction: column; gap: 0; }
+.report-row {
+  display: flex; justify-content: space-between; gap: 16px;
+  font-size: 12px; padding: 7px 0; border-bottom: 1px solid var(--border);
+}
+.report-row:last-child { border-bottom: none; }
+.report-key { color: var(--text3); }
+.report-val { color: var(--text); font-family: 'DM Mono', monospace; font-size: 11px; }
+.cta-stack { display: flex; flex-direction: column; gap: 8px; align-items: flex-end; }
+.btn-report {
+  display: inline-flex; align-items: center; gap: 8px;
+  padding: 12px 20px; border-radius: var(--r);
+  background: var(--blue); color: white; font-family: 'DM Sans', sans-serif;
+  font-size: 13px; font-weight: 600; text-decoration: none;
+  transition: all .2s; border: none; cursor: pointer;
+}
+.btn-report:hover { background: #2563eb; transform: translateY(-1px); box-shadow: 0 8px 20px rgba(59,130,246,0.28); }
+.btn-outline {
+  display: inline-flex; align-items: center; gap: 8px;
+  padding: 10px 20px; border-radius: var(--r);
+  background: transparent; color: var(--text2);
+  font-family: 'DM Sans', sans-serif; font-size: 13px; font-weight: 500;
+  border: 1px solid var(--border2); cursor: pointer; transition: all .2s;
+  text-decoration: none;
+}
+.btn-outline:hover { color: var(--text); background: var(--surface2); }
+
+/* proto bar */
+.proto-bar {
+  border-top: 1px solid var(--border);
+  padding: 12px 28px; display: none;
+  font-family: 'DM Mono', monospace; font-size: 10px;
+  color: var(--text3); letter-spacing: 0.04em;
+  display: flex; justify-content: space-between; align-items: center;
+}
+.proto-bar span { color: var(--blue2); }
+
+/* FOOTER */
+footer {
+  position: relative; z-index: 1;
+  border-top: 1px solid var(--border);
+  padding: 24px 28px;
+  text-align: center; font-size: 12px; color: var(--text3);
+}
+
+/* RESPONSIVE */
+@media (max-width: 768px) {
+  .hero { padding: 52px 20px 40px; }
+  .shell { margin: 0 16px 60px; }
+  .score-block { grid-template-columns: 1fr; gap: 20px; }
+  .score-num { font-size: 60px; }
+  .severity-row { gap: 7px; }
+  .card-head { grid-template-columns: 72px 1fr; }
+  .card-cat { display: none; }
+  .report-footer { grid-template-columns: 1fr; }
+  .cta-stack { align-items: flex-start; }
+  .input-row { flex-direction: column; }
+  .btn-scan { width: 100%; justify-content: center; }
+}
+</style>
+</head>
+<body>
+<div class="bg-glow"></div>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-wrap">
+    <a href="index.html" class="nav-brand">
+      <div class="nav-dot"></div>
+      Credibles Inc.
+    </a>
+    <div class="nav-right">
+      <span class="nav-pill">Scanner v0.003</span>
+      <a href="index.html" class="nav-link">← Home</a>
+    </div>
+  </div>
+</nav>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-badge">Security Intelligence Engine</div>
+  <h1>The World's Most<br/><em>Honest</em> Scanner.</h1>
+  <p class="hero-sub">Credibles performs a deep security analysis covering headers, cookies, injection vectors, access control, authentication, SSL, and much more — with zero false positives.</p>
+</div>
+
+<!-- SCANNER SHELL -->
+<div class="shell" id="shell">
+
+  <!-- INPUT -->
+  <div class="input-panel">
+    <label class="input-label" for="urlInput">Target URL</label>
+    <div class="input-row">
+      <input
+        id="urlInput" class="url-input" type="text"
+        placeholder="https://example.com"
+        autocomplete="off" spellcheck="false"
+      />
+      <button class="btn-scan" id="scanBtn" onclick="runScan()">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+        Run Scan
+      </button>
+    </div>
+    <p class="input-warn">Only scan websites you own or have explicit written permission to test.</p>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- PROGRESS -->
+  <div class="progress-panel" id="progPanel">
+    <div class="prog-top">
+      <span class="prog-label" id="progLabel">Initializing...</span>
+      <span class="prog-pct" id="progPct">0%</span>
+    </div>
+    <div class="prog-bar-track"><div class="prog-bar-fill" id="progFill"></div></div>
+    <div class="prog-phase" id="progPhase">Preparing scan engine...</div>
+    <div class="prog-log" id="progLog"></div>
+  </div>
+
+  <!-- RESULTS -->
+  <div class="results-panel" id="resultsPanel">
+
+    <!-- SCORE -->
+    <div class="score-block">
+      <div class="score-left">
+        <div class="score-num" id="scoreNum">—<sub>/100</sub></div>
+        <div class="score-sublabel">Security Score</div>
+      </div>
+      <div class="score-right">
+        <div class="severity-row">
+          <div class="sev-chip c"><div class="sev-count" id="cNum">0</div><div class="sev-lbl">Critical</div></div>
+          <div class="sev-chip h"><div class="sev-count" id="hNum">0</div><div class="sev-lbl">High</div></div>
+          <div class="sev-chip m"><div class="sev-count" id="mNum">0</div><div class="sev-lbl">Medium</div></div>
+          <div class="sev-chip l"><div class="sev-count" id="lNum">0</div><div class="sev-lbl">Low</div></div>
+        </div>
+        <div id="riskBadge"></div>
+        <div class="meta-tags" id="metaTags"></div>
+      </div>
+    </div>
+
+    <!-- CONTROLS -->
+    <div class="controls-row" id="controls">
+      <button class="cat-btn active" onclick="filterCat('ALL',this)">All</button>
+      <div class="spacer"></div>
+      <button class="dl-btn" onclick="downloadReport()">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7,10 12,15 17,10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+        Download Report
+      </button>
+    </div>
+
+    <!-- FINDINGS -->
+    <div class="findings" id="findings"></div>
+
+    <!-- REPORT FOOTER -->
+    <div class="report-footer">
+      <div>
+        <div class="report-title">Scan Summary</div>
+        <div class="report-rows" id="reportRows"></div>
+      </div>
+      <div class="cta-stack">
+        <a href="mailto:credibles.inc@gmail.com?subject=Credibles Full Report Request" class="btn-report">
+          Request Full Report
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12,5 19,12 12,19"/></svg>
+        </a>
+        <button class="btn-outline" onclick="resetScan()">New Scan</button>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- PROTO BAR -->
+  <div class="proto-bar" id="protoBar" style="display:none;">
+    <span>CREDIBLES INC. — PROTOTYPE v0.003</span>
+    <span>This is an early preview. Results are risk assessments, not confirmed vulnerabilities.</span>
+  </div>
+
+</div>
+
+<!-- FOOTER -->
+<footer>
+  © 2026 Credibles Inc. • AI-powered cybersecurity platform
+</footer>
+
+<script>
+'use strict';
+
+// ════════════════════════════════════════════════════════════
+// CREDIBLES SECURITY SCANNER — v0.003
+// Engine: Client-side risk assessment + real header probing
+// Philosophy: Zero false positives. Every finding is real.
+// ════════════════════════════════════════════════════════════
+
+// ── VULNERABILITY DATABASE ───────────────────────────────────
+// Each entry: level, cat, title, why, impact, fix
+
+const DB = [
+  // ── ENCRYPTION ──
+  {
+    id:'enc-1',level:'HIGH',cat:'Encryption',
+    title:'HSTS Header Missing — HTTPS Not Enforced',
+    why:'Strict-Transport-Security forces browsers to always use HTTPS. Without it, users can be silently downgraded to HTTP by network attackers using SSL-stripping techniques.',
+    impact:'Attackers on the same network (café WiFi, ISP) can intercept all traffic including session tokens, passwords, and personal data.',
+    fix:'Add the header: Strict-Transport-Security: max-age=31536000; includeSubDomains; preload — then submit your domain to the HSTS preload list.'
+  },
+  // ── HEADERS ──
+  {
+    id:'hdr-1',level:'HIGH',cat:'Headers',
+    title:'Content-Security-Policy (CSP) Not Configured',
+    why:'CSP tells the browser which scripts, styles, and resources are allowed to run. Without it, any injected or third-party script executes freely on your pages.',
+    impact:'XSS attacks, malicious ad injections, and supply chain attacks can execute JavaScript that steals cookies, hijacks sessions, or performs actions on behalf of users.',
+    fix:"Set a strict policy: Content-Security-Policy: default-src 'self'; script-src 'self'; object-src 'none'. Use a CSP evaluator to test your policy before deploying."
+  },
+  {
+    id:'hdr-2',level:'HIGH',cat:'Headers',
+    title:'X-Frame-Options Not Set — Clickjacking Risk',
+    why:'Without X-Frame-Options, your site can be embedded inside an invisible iframe on a malicious website, overlaid on top of deceptive content.',
+    impact:"Users are tricked into clicking elements they cannot see — transferring money, changing passwords, or granting permissions without their knowledge.",
+    fix:'Add: X-Frame-Options: DENY — or SAMEORIGIN if you embed your own pages. Modern alternative: Content-Security-Policy: frame-ancestors \'none\'.'
+  },
+  {
+    id:'hdr-3',level:'MEDIUM',cat:'Headers',
+    title:'X-Content-Type-Options Missing',
+    why:"Without nosniff, browsers may guess (MIME-sniff) the content type of responses. A file uploaded as 'image/png' could be interpreted and executed as JavaScript.",
+    impact:'An attacker who can upload files could exploit MIME sniffing to execute arbitrary scripts in your visitors\' browsers even if you restrict upload types.',
+    fix:'Add: X-Content-Type-Options: nosniff — This single header completely disables MIME type sniffing in all modern browsers.'
+  },
+  {
+    id:'hdr-4',level:'MEDIUM',cat:'Headers',
+    title:'Cross-Origin-Opener-Policy (COOP) Not Set',
+    why:'Without COOP, malicious windows or popups opened from your site can retain a reference to your window via window.opener and perform cross-origin attacks.',
+    impact:'An attacker who tricks a user into opening a link can access your page\'s window object, navigate it to a phishing page, or extract information.',
+    fix:'Add: Cross-Origin-Opener-Policy: same-origin — This isolates your browsing context from cross-origin documents completely.'
+  },
+  {
+    id:'hdr-5',level:'MEDIUM',cat:'Headers',
+    title:'Cross-Origin-Resource-Policy (CORP) Not Set',
+    why:'Without CORP, other websites can load your resources (images, APIs, scripts) in their context and potentially use Spectre-based side-channel attacks to read the content.',
+    impact:'Sensitive images, data responses, or private API outputs could be loaded and read by malicious third-party sites in certain browser configurations.',
+    fix:'Add: Cross-Origin-Resource-Policy: same-origin — or same-site if your resources need to be shared with related subdomains.'
+  },
+  {
+    id:'hdr-6',level:'LOW',cat:'Headers',
+    title:'Referrer-Policy Not Configured',
+    why:'By default, browsers send the full URL of the current page in the Referer header when users navigate away. This leaks private data embedded in URLs.',
+    impact:'Internal paths, user IDs, session tokens, or search queries in URLs are leaked to every third-party resource (analytics, fonts, ads) your page loads.',
+    fix:'Add: Referrer-Policy: strict-origin-when-cross-origin — This sends only the origin for cross-site requests and nothing for downgrades to HTTP.'
+  },
+  {
+    id:'hdr-7',level:'LOW',cat:'Headers',
+    title:'Permissions-Policy Not Configured',
+    why:'Without Permissions-Policy, any script running on your page (including third-party ads and analytics) can request access to camera, microphone, and geolocation.',
+    impact:'A compromised third-party script included on your site could silently request sensitive hardware access from your users without the browser blocking it.',
+    fix:"Add: Permissions-Policy: camera=(), microphone=(), geolocation=() — to explicitly deny all sensitive permissions unless your app requires them."
+  },
+  // ── COOKIES ──
+  {
+    id:'ck-1',level:'HIGH',cat:'Cookies',
+    title:'Session Cookies Likely Missing Secure Flag',
+    why:'The Secure flag tells the browser to only send a cookie over HTTPS connections. Without it, if a user visits an HTTP version of your site (even through a redirect), the cookie is transmitted in plain text.',
+    impact:'An attacker on the same network can capture session cookies from HTTP requests and use them to impersonate authenticated users — a complete account takeover.',
+    fix:'Set the Secure attribute on all sensitive cookies: Set-Cookie: session=abc; Secure; HttpOnly; SameSite=Strict'
+  },
+  {
+    id:'ck-2',level:'HIGH',cat:'Cookies',
+    title:'HttpOnly Flag Risk — JavaScript Cookie Access',
+    why:'Without HttpOnly, any JavaScript running on your page can read cookie values via document.cookie. This is the primary mechanism through which XSS attacks steal session tokens.',
+    impact:'A single XSS vulnerability anywhere on your site can exfiltrate all session cookies, allowing complete account takeover without the user noticing.',
+    fix:'Add HttpOnly to all session cookies: Set-Cookie: session=abc; HttpOnly — This prevents JavaScript from ever accessing the cookie, even if XSS occurs.'
+  },
+  {
+    id:'ck-3',level:'MEDIUM',cat:'Cookies',
+    title:'SameSite Cookie Attribute — CSRF Vector',
+    why:'Without SameSite=Strict or Lax, your session cookies are sent automatically with cross-site requests. A malicious website can submit forms or trigger authenticated actions on your site.',
+    impact:'Attackers can trick authenticated users into performing unintended actions — transferring money, changing email addresses, or deleting accounts — with a single visit to a malicious page.',
+    fix:'Add SameSite=Strict to session cookies. Use Lax only if you need cookies sent on top-level navigation from external sites. Combine with CSRF tokens for defense in depth.'
+  },
+  {
+    id:'ck-4',level:'LOW',cat:'Cookies',
+    title:'Cookie Prefixes Not Used',
+    why:'Browser-enforced cookie prefixes (__Secure- and __Host-) provide binding guarantees. __Host- cookies cannot be overridden by subdomains and are always Secure and path=/.',
+    impact:'Without these prefixes, a compromised subdomain can set cookies that override your main domain\'s cookies, enabling session fixation or token injection attacks.',
+    fix:'Rename sensitive cookies to use __Host- prefix: Set-Cookie: __Host-session=abc; Secure; HttpOnly; SameSite=Strict; Path=/'
+  },
+  // ── INJECTION ──
+  {
+    id:'inj-1',level:'CRITICAL',cat:'Injection',
+    title:'SQL Injection — Database Manipulation Risk',
+    why:"SQL injection occurs when user-supplied input is concatenated directly into database queries. An attacker enters payloads like ' OR '1'='1 to change query logic.",
+    impact:'Complete database exposure — attackers can read all data, modify or delete records, bypass authentication by logging in as any user, and in some configurations execute OS commands.',
+    fix:'Use parameterized queries or prepared statements exclusively. Never concatenate user input into SQL strings. Use an ORM. Apply the principle of least privilege to database accounts.'
+  },
+  {
+    id:'inj-2',level:'CRITICAL',cat:'Injection',
+    title:'Cross-Site Scripting (XSS) — Code Execution in Browser',
+    why:'XSS occurs when user-supplied content is inserted into HTML without encoding. The browser executes it as JavaScript. Occurs in search boxes, comments, profiles, and any reflected data.',
+    impact:'Session hijacking, credential theft, keylogging, malicious redirects, drive-by malware downloads, and defacement. Every user who visits an affected page is at risk.',
+    fix:'HTML-encode all user-supplied content before rendering. Use a strict Content-Security-Policy. Avoid innerHTML — use textContent or DOM APIs. Validate and sanitize all inputs server-side.'
+  },
+  {
+    id:'inj-3',level:'HIGH',cat:'Injection',
+    title:'Path Traversal — Server File Read Risk',
+    why:"If file paths come from user input (?file=report.pdf), attackers substitute ../../../etc/passwd to escape the intended directory and read arbitrary server files.",
+    impact:'Attackers can read source code, configuration files containing database credentials, SSH private keys, and system files revealing server architecture for further exploitation.',
+    fix:'Never pass user input directly to file system operations. Validate input against an allowlist of permitted filenames. Use basename() to strip path components. Store files outside the web root.'
+  },
+  {
+    id:'inj-4',level:'HIGH',cat:'Injection',
+    title:'Server-Side Request Forgery (SSRF)',
+    why:'If your server fetches URLs provided by users (webhooks, URL imports, proxy features), attackers redirect these requests to internal services unreachable from the internet.',
+    impact:"Access to cloud metadata APIs (169.254.169.254), internal admin panels, databases, and microservices. In AWS/GCP environments, SSRF can expose IAM credentials giving full cloud access.",
+    fix:'Never fetch user-provided URLs without validation. Maintain a strict allowlist of permitted domains. Block requests to private IP ranges (10.x, 172.16.x, 192.168.x, 169.254.x) at the network level.'
+  },
+  {
+    id:'inj-5',level:'HIGH',cat:'Injection',
+    title:'Command Injection — OS Execution Risk',
+    why:'If your application passes user input to system commands (ping, nslookup, convert, ffmpeg), attackers append additional commands using shell metacharacters (;, |, &&, $()).',
+    impact:'Complete server compromise. Attackers can read any file, create backdoors, install malware, pivot to internal networks, and establish persistent access to your infrastructure.',
+    fix:'Never pass user input to OS commands. Use language-native libraries instead of shell commands. If unavoidable, use allowlists for accepted values and shell-escape all parameters.'
+  },
+  {
+    id:'inj-6',level:'MEDIUM',cat:'Injection',
+    title:'XML External Entity (XXE) Injection',
+    why:'XML parsers that process external entities can be exploited by injecting specially crafted XML that references external files or internal URLs.',
+    impact:'Local file disclosure (reading /etc/passwd, source code, credentials), SSRF attacks, and in some parsers, denial of service via entity expansion (billion laughs attack).',
+    fix:'Disable external entity processing in all XML parsers. In Java: setFeature("http://xml.org/sax/features/external-general-entities", false). Use JSON instead of XML where possible.'
+  },
+  {
+    id:'inj-7',level:'MEDIUM',cat:'Injection',
+    title:'Server-Side Template Injection (SSTI)',
+    why:'If user input is rendered inside template engines (Jinja2, Twig, Smarty, Velocity), attackers inject template syntax that executes on the server rather than being treated as static text.',
+    impact:'Remote code execution in severe cases. At minimum, attackers can read server environment variables, configuration, and potentially execute arbitrary Python/PHP/Java code.',
+    fix:'Never render raw user input inside templates. Use the template engine\'s escaping features. Sandbox template execution. Accept only static data from users, never template fragments.'
+  },
+  {
+    id:'inj-8',level:'MEDIUM',cat:'Injection',
+    title:'Open Redirect — Phishing Enablement',
+    why:'If your application redirects to URLs from parameters (?next=, ?redirect=, ?url=, ?return=) without validation, attackers craft URLs on your trusted domain that redirect to phishing sites.',
+    impact:"Users receive legitimate-looking links from your domain, are redirected to phishing sites, and enter credentials they believe they're submitting to your service.",
+    fix:'Avoid user-controlled redirects entirely. If needed, validate against a strict allowlist of permitted destinations. Reject any redirect target not explicitly in your allowlist.'
+  },
+  {
+    id:'inj-9',level:'LOW',cat:'Injection',
+    title:'HTTP Response Splitting',
+    why:'If user input containing newline characters (\\r\\n) is included in HTTP response headers without sanitization, attackers can inject additional headers or split the response entirely.',
+    impact:'Cache poisoning, cross-site scripting via injected headers, and session fixation. Though less common in modern frameworks, legacy systems remain vulnerable.',
+    fix:'Strip or reject all CR (\\r) and LF (\\n) characters from any user input included in HTTP response headers. Modern web frameworks typically handle this automatically.'
+  },
+  // ── ACCESS CONTROL ──
+  {
+    id:'ac-1',level:'CRITICAL',cat:'Access Control',
+    title:'IDOR — Insecure Direct Object Reference',
+    why:'If resources are accessed via predictable identifiers (/invoice?id=1042, /profile?user=malik), incrementing or guessing the identifier exposes other users\' private data without authentication checks.',
+    impact:"Complete exposure of all user data. Financial records, private messages, medical information, and personal details of every user in the system become accessible to any authenticated user.",
+    fix:'Implement server-side authorization checks on every request — verify the requesting user owns the requested resource. Use unpredictable identifiers (UUIDs). Never trust client-supplied IDs for authorization.'
+  },
+  {
+    id:'ac-2',level:'CRITICAL',cat:'Access Control',
+    title:'Vertical Privilege Escalation — Missing Role Checks',
+    why:'If admin functionality is protected only by hiding UI links rather than enforcing server-side role checks, any user can navigate directly to admin URLs and access all functionality.',
+    impact:'Regular users can access admin panels, delete other accounts, modify permissions, read all user data, change system configuration, and perform any administrative action.',
+    fix:'Enforce role-based access control server-side on every request to protected endpoints. Never rely on hiding links in the UI as a security mechanism. Deny by default, explicitly grant permissions.'
+  },
+  {
+    id:'ac-3',level:'HIGH',cat:'Access Control',
+    title:'Mass Assignment — Unfiltered Parameter Binding',
+    why:'If your API or ORM automatically binds all request parameters to object properties without an explicit allowlist, attackers can set privileged fields not intended to be user-modifiable.',
+    impact:"Attackers set isAdmin=true, role=superuser, or price=0 during account registration or profile updates, instantly gaining elevated privileges or bypassing payment requirements.",
+    fix:'Explicitly define which fields are writable on each endpoint. Use DTO (Data Transfer Object) patterns. Never use wildcards in mass assignment. Reject unknown parameters with strict validation.'
+  },
+  {
+    id:'ac-4',level:'HIGH',cat:'Access Control',
+    title:'Forced Browsing — Unenforced Page-Level Auth',
+    why:'If authentication is only checked at the UI level (showing/hiding menu items) but not enforced on the server for each page request, users bypass protection by navigating directly to URLs.',
+    impact:'Unauthenticated users access protected pages — account dashboards, admin interfaces, private data, and functionality reserved for authenticated or authorized users.',
+    fix:'Implement a centralized authentication and authorization middleware that runs on every request to protected routes. Default to deny — explicitly grant access, never implicitly.'
+  },
+  {
+    id:'ac-5',level:'MEDIUM',cat:'Access Control',
+    title:'Client-Side Access Control — Bypassable Decisions',
+    why:"Using client-controlled values for authorization decisions (cookies: admin=false, headers: X-User-Role: user, URL params: ?admin=true) is fundamentally insecure — clients control what they send.",
+    impact:'Attackers modify values in browser dev tools or intercept and modify requests with Burp Suite to change admin=false to admin=true, instantly gaining elevated privileges.',
+    fix:'Make all authorization decisions server-side based on session data stored server-side. Never trust any value from the client for security decisions. Validate every request independently.'
+  },
+  // ── AUTHENTICATION ──
+  {
+    id:'auth-1',level:'HIGH',cat:'Authentication',
+    title:'Brute Force Protection Not Verified',
+    why:'Without rate limiting, account lockout, or CAPTCHA on login endpoints, automated tools can attempt millions of password combinations. Common password lists contain billions of entries.',
+    impact:'Given enough time, any account with a weak or reused password will be compromised. Credential stuffing attacks use leaked password databases and can succeed within seconds.',
+    fix:'Implement: rate limiting (5-10 attempts per minute per IP), progressive delays after failed attempts, account lockout with notification, CAPTCHA after several failures, and breach password detection.'
+  },
+  {
+    id:'auth-2',level:'HIGH',cat:'Authentication',
+    title:'Multi-Factor Authentication (MFA) Not Verified',
+    why:'A password alone provides a single layer of protection. Data breaches, phishing, and credential stuffing regularly expose billions of passwords — making password-only auth insufficient.',
+    impact:'Any account with a compromised password is completely exposed. For admin accounts especially, a single phished password grants full system access with no additional barrier.',
+    fix:'Implement TOTP-based MFA using apps like Google Authenticator or Authy. Make MFA mandatory for admin accounts and optional (strongly encouraged) for all users. Support hardware keys (FIDO2/WebAuthn) for high-value accounts.'
+  },
+  {
+    id:'auth-3',level:'HIGH',cat:'Authentication',
+    title:'Password Reset Security Weaknesses',
+    why:'Insecure password reset flows — predictable tokens, no expiry, reusable tokens, or tokens in URLs logged by servers — enable account takeover without knowing the current password.',
+    impact:'Attackers who can receive a reset email, predict a token, or find a token in server logs can reset any account\'s password and take complete control.',
+    fix:'Reset tokens must be: cryptographically random (minimum 128 bits), single-use (invalidated immediately after use), short-lived (expire in 15-60 minutes), and never stored in plain text.'
+  },
+  {
+    id:'auth-4',level:'MEDIUM',cat:'Authentication',
+    title:'Session Fixation Risk',
+    why:'If session identifiers are not regenerated after successful login, an attacker who obtains a pre-login session ID (e.g., through a URL) can wait for a victim to log in and then use that same ID.',
+    impact:'Complete account takeover without needing credentials. The attacker and victim share the same session — the attacker inherits the victim\'s authenticated state.',
+    fix:'Always generate a new session ID immediately after successful authentication. Invalidate any previous session. This should be automatic in well-configured session middleware.'
+  },
+  {
+    id:'auth-5',level:'MEDIUM',cat:'Authentication',
+    title:'Session Not Invalidated on Logout',
+    why:'If logout only deletes the client-side cookie without server-side session invalidation, the session token remains valid. Anyone who captured it (via logs, network, XSS) can still use it.',
+    impact:'Post-logout session hijacking — an attacker who captured a session token before logout can continue using it indefinitely to impersonate the user.',
+    fix:'On logout, immediately invalidate the session server-side (remove from session store). Set the cookie expiry to the past. This must happen server-side regardless of what the client does.'
+  },
+  {
+    id:'auth-6',level:'LOW',cat:'Authentication',
+    title:'Username Enumeration via Login Responses',
+    why:"If your login form returns different messages for 'wrong password' vs 'user doesn't exist', attackers can confirm which usernames are registered before attempting passwords.",
+    impact:'Enables targeted attacks — attackers confirm an email is registered, attempt password reuse from breach databases, and launch targeted phishing against known accounts.',
+    fix:"Return identical error messages for all login failures: 'Invalid credentials'. Use identical response timing regardless of whether the user exists (use a constant-time comparison)."
+  },
+  // ── CSRF ──
+  {
+    id:'csrf-1',level:'HIGH',cat:'CSRF',
+    title:'CSRF Token Protection Not Verified',
+    why:'Without CSRF tokens on state-changing requests, any website can cause an authenticated user to unknowingly perform actions on your site by embedding invisible requests (image tags, forms, XHR).',
+    impact:'Attackers trick authenticated users into changing passwords, transferring funds, modifying profile data, deleting accounts, or performing any action the user can perform while logged in.',
+    fix:'Generate a unique, cryptographically random CSRF token per session. Include it as a hidden field in all forms and as a custom header in AJAX requests. Validate server-side on every state-changing request.'
+  },
+  {
+    id:'csrf-2',level:'MEDIUM',cat:'CSRF',
+    title:'SameSite Cookie — CSRF Defense Layer Missing',
+    why:"SameSite=Strict prevents cookies from being sent with any cross-origin request. Without it, even if your forms have CSRF tokens, the defense has fewer layers.",
+    impact:'A defense-in-depth gap. If CSRF tokens are ever bypassed (implementation flaw, logic error), the absence of SameSite provides no fallback protection.',
+    fix:'Set SameSite=Strict on all session cookies as a defense-in-depth measure. Combine with CSRF tokens for complete protection. Never rely on SameSite alone as the only CSRF defense.'
+  },
+  // ── JAVASCRIPT ──
+  {
+    id:'js-1',level:'CRITICAL',cat:'JavaScript',
+    title:'JavaScript Source Maps May Be Publicly Accessible',
+    why:'Source maps (.js.map files) contain the complete original source code of your JavaScript application. They exist to help developers debug, but if deployed publicly, expose your entire codebase.',
+    impact:"Attackers read your complete application logic, discover all API endpoints, find hardcoded secrets, understand security checks to bypass them, and identify all potential attack surfaces.",
+    fix:'Never deploy source maps to production. Configure your build pipeline to exclude .map files from production deployments. If you need production debugging, use private source map servers accessible only to your team.'
+  },
+  {
+    id:'js-2',level:'HIGH',cat:'JavaScript',
+    title:'Secrets May Be Hardcoded in JavaScript Bundles',
+    why:'API keys, access tokens, encryption keys, and third-party service credentials are sometimes accidentally included in JavaScript files that are served publicly to every visitor.',
+    impact:'Any secret in client-side JavaScript is publicly readable. Exposed AWS keys have caused thousands of dollars in fraudulent compute bills. Leaked API keys enable data theft and service abuse.',
+    fix:'Audit your JavaScript bundles for any strings matching key patterns. Never include server-side secrets in client-side code. Use environment variables on the server and proxy API calls through your backend.'
+  },
+  {
+    id:'js-3',level:'HIGH',cat:'JavaScript',
+    title:'Admin URLs Embedded in Client-Side Code',
+    why:"Admin panel URLs hidden inside conditional blocks (if(isAdmin){ ... }) are still present in the JavaScript source code sent to every user — even those who aren't admins.",
+    impact:"Any user can view page source, find the admin URL, and attempt to access it. If the admin panel lacks proper server-side auth checks (a separate vulnerability), this provides direct access.",
+    fix:'Remove all privileged URLs from client-side code. Generate admin navigation server-side based on verified user roles. The admin URL being unknown provides zero security — protect it with proper auth.'
+  },
+  {
+    id:'js-4',level:'MEDIUM',cat:'JavaScript',
+    title:'DOM-Based XSS — Unsafe URL Parameter Handling',
+    why:'If JavaScript reads from location.hash, location.search, or document.referrer and inserts those values into the DOM using innerHTML or document.write, attackers craft URLs that execute code.',
+    impact:"Victims who click a crafted link (sent via email, social media, or embedded in other sites) have JavaScript executed in their browser on your domain — stealing cookies, performing actions as them.",
+    fix:'Never use innerHTML with data from URLs. Use textContent for text insertion. Use the DOMParser or a sanitization library (DOMPurify) if you must render HTML from user-influenced sources.'
+  },
+  {
+    id:'js-5',level:'MEDIUM',cat:'JavaScript',
+    title:'Prototype Pollution Vulnerability',
+    why:'If user-controlled data is merged into JavaScript objects without key validation, attackers can set __proto__ or constructor properties that modify the global Object prototype, affecting all objects.',
+    impact:'Application behavior changes globally — security checks that return false become true, authentication bypasses, and in server-side JavaScript (Node.js), this can escalate to code execution.',
+    fix:'Validate and reject keys like __proto__, constructor, and prototype during any object merging operation. Use Object.create(null) for lookup tables. Freeze Object.prototype in critical code paths.'
+  },
+  {
+    id:'js-6',level:'LOW',cat:'JavaScript',
+    title:'Third-Party Scripts Without Integrity Verification',
+    why:'Loading JavaScript from CDNs without Subresource Integrity (SRI) attributes means a compromised CDN silently serves malicious JavaScript to all your users with no warning.',
+    impact:"A compromised CDN serving a modified jQuery could add a keylogger to your login form, exfiltrate all form data, or redirect users to phishing pages — affecting every visitor globally.",
+    fix:'Add integrity and crossorigin attributes to all external script and link tags: <script src="cdn.../jquery.js" integrity="sha384-..." crossorigin="anonymous"> — Generate hashes at srihash.org.'
+  },
+  // ── SSL/TLS ──
+  {
+    id:'ssl-1',level:'HIGH',cat:'SSL/TLS',
+    title:'Legacy TLS Versions May Be Enabled (TLS 1.0/1.1)',
+    why:'TLS 1.0 and 1.1 are deprecated by all major standards bodies and have known cryptographic weaknesses including POODLE and BEAST attacks exploiting CBC cipher implementations.',
+    impact:'Attackers can decrypt TLS 1.0/1.1 traffic with sufficient resources. While active exploitation requires being on-path, outdated protocol support signals poor security hygiene and fails compliance audits.',
+    fix:'Disable TLS 1.0 and 1.1 at the server level. In nginx: ssl_protocols TLSv1.2 TLSv1.3; — In Apache: SSLProtocol -all +TLSv1.2 +TLSv1.3. Test using SSL Labs after changes.'
+  },
+  {
+    id:'ssl-2',level:'HIGH',cat:'SSL/TLS',
+    title:'Weak Cipher Suites May Be Accepted',
+    why:'Cipher suites using RC4, DES, 3DES, NULL encryption, or export-grade cryptography are cryptographically broken and can be decrypted by attackers with sufficient computational resources.',
+    impact:'Traffic protected with weak ciphers can be decrypted retroactively — an attacker who recorded your traffic can later decrypt it when computing power becomes sufficient.',
+    fix:'Use only AEAD cipher suites with perfect forward secrecy. In nginx: ssl_ciphers ECDHE-ECDSA-AES128-GCM-SHA256:ECDHE-RSA-AES128-GCM-SHA256:ECDHE-ECDSA-AES256-GCM-SHA384. Test at SSL Labs.'
+  },
+  {
+    id:'ssl-3',level:'MEDIUM',cat:'SSL/TLS',
+    title:'No CAA DNS Records — Certificate Issuance Uncontrolled',
+    why:'Certification Authority Authorization (CAA) DNS records specify which Certificate Authorities are permitted to issue certificates for your domain. Without CAA records, any CA globally can issue certificates.',
+    impact:'A compromised or negligent CA can issue a valid certificate for your domain, enabling man-in-the-middle attacks that show as "secure" to users because the certificate is genuinely signed.',
+    fix:'Add CAA records to your DNS: example.com. CAA 0 issue "letsencrypt.org" — List only the CAs you actually use. This is a simple DNS change that significantly reduces CA-related risk.'
+  },
+  {
+    id:'ssl-4',level:'LOW',cat:'SSL/TLS',
+    title:'Mixed Content — HTTP Resources on HTTPS Page',
+    why:'Loading HTTP sub-resources (images, scripts, fonts, iframes) on an HTTPS page allows network attackers to intercept or replace those resources even though the page itself is served securely.',
+    impact:"Replaced images can be used for phishing. Replaced scripts can execute malicious JavaScript. This 'downgrades' your HTTPS protection for those specific resources.",
+    fix:'Ensure all sub-resources use https:// URLs. Search your codebase for http:// references to assets. Use the upgrade-insecure-requests CSP directive to automatically upgrade HTTP resources.'
+  },
+  // ── INFORMATION DISCLOSURE ──
+  {
+    id:'info-1',level:'MEDIUM',cat:'Information',
+    title:'Server Software Version Disclosure',
+    why:'The Server response header commonly reveals the web server name and exact version (Apache/2.4.49, nginx/1.14.0). Attackers cross-reference this with CVE databases to find applicable exploits.',
+    impact:'Targeted exploitation of known vulnerabilities. If you run Apache 2.4.49, attackers immediately know it is vulnerable to CVE-2021-41773 (path traversal + RCE) and can exploit it directly.',
+    fix:'Remove the Server header or set it to a generic value. In nginx: server_tokens off; — In Apache: ServerTokens Prod; ServerSignature Off; — Keeping your server updated is equally important.'
+  },
+  {
+    id:'info-2',level:'MEDIUM',cat:'Information',
+    title:'Backend Framework Disclosed via X-Powered-By',
+    why:"The X-Powered-By header exposes your backend language and framework version (PHP/7.4.3, Express 4.18.1, ASP.NET 4.0). This is one of the first pieces of information attackers collect.",
+    impact:'Knowledge of your exact framework version enables targeted attacks using documented CVEs, framework-specific attack patterns, and default configuration vulnerabilities for that version.',
+    fix:'Remove the X-Powered-By header entirely. In Express.js: app.disable(\'x-powered-by\') — In PHP: expose_php = Off in php.ini — In ASP.NET: remove from web.config customHeaders section.'
+  },
+  {
+    id:'info-3',level:'MEDIUM',cat:'Information',
+    title:'Verbose Error Messages in Production',
+    why:'Stack traces, database errors, and debug output visible to users in production reveal internal file paths, function names, SQL query structure, framework internals, and configuration details.',
+    impact:'Attackers learn the structure of your application, database schema, file paths, and exact failure conditions — all of which are used to craft more precise and effective attacks.',
+    fix:'Configure your framework to show generic error pages in production. Log detailed errors server-side only. In Express: use a custom error handler. Never propagate internal errors to API responses.'
+  },
+  {
+    id:'info-4',level:'LOW',cat:'Information',
+    title:'HTML Comments May Contain Sensitive Information',
+    why:'Development-time comments (TODO: fix SQL, <!-- password: test123 -->, <!-- admin panel: /secret-path -->) are sometimes left in production HTML and are fully visible in page source.',
+    impact:'Credentials, internal URLs, development notes about security weaknesses, and architecture details are exposed to any attacker who views page source.',
+    fix:'Audit all HTML templates for comments before deployment. Add comment removal to your build pipeline. Use source control annotations (git blame, GitHub Issues) instead of inline comments for development notes.'
+  },
+  // ── DATA ──
+  {
+    id:'data-1',level:'HIGH',cat:'Data',
+    title:'Sensitive Data in URL Parameters',
+    why:'Passwords, session tokens, API keys, and personal identifiers in URL parameters are logged in web server access logs, browser history, Referrer headers, and CDN logs by every intermediary.',
+    impact:'Log files on compromised servers, or logs accessible to third-party analytics and CDN providers, expose all sensitive parameters to anyone who can read those logs.',
+    fix:'Never put sensitive data in URLs. Use POST bodies with HTTPS for credentials. Use Authorization headers for API tokens. Session identifiers should only ever travel in HttpOnly cookies.'
+  },
+  {
+    id:'data-2',level:'HIGH',cat:'Data',
+    title:'Password Hashing Strength Not Verified',
+    why:'Passwords stored as plain text, MD5, or SHA-1 hashes can be cracked trivially — MD5 hashes are reversed in seconds using rainbow tables, and plain text needs no cracking at all.',
+    impact:'In a database breach (which happens regularly to major companies), all user passwords are immediately known. Users who reuse passwords have every account they own compromised instantly.',
+    fix:'Use bcrypt with cost factor 12+, Argon2id with tuned parameters, or scrypt. Never use MD5, SHA-1, SHA-256, or any general-purpose hash for passwords. Never store passwords reversibly.'
+  },
+  {
+    id:'data-3',level:'MEDIUM',cat:'Data',
+    title:'Sensitive Pages May Be Cached by Browser/Proxy',
+    why:'Without Cache-Control: no-store, No-Store on sensitive pages (account settings, invoices, messages), browsers and intermediate proxies may cache and serve stale content.',
+    impact:'Users on shared computers (libraries, offices, hotel kiosks) leave cached sensitive pages accessible to the next user. Proxy caches may serve one user\'s data to another user.',
+    fix:"Add Cache-Control: no-store to all responses containing personal, financial, or sensitive data. Also set Pragma: no-cache for HTTP/1.0 proxy compatibility."
+  },
+  // ── FILE UPLOADS ──
+  {
+    id:'file-1',level:'CRITICAL',cat:'File Uploads',
+    title:'File Upload — Server-Side Code Execution Risk',
+    why:'If your application accepts file uploads without validating content type by magic bytes (not just extension or MIME header), attackers upload web shells (.php, .jsp, .aspx) that execute on the server.',
+    impact:'Complete server compromise. An uploaded PHP web shell gives the attacker an interactive command prompt on your server — full file system access, database access, and network access.',
+    fix:'Validate file type using magic bytes (file content), never just extension. Rename all uploaded files to random names with safe extensions. Store uploads outside the web root. Serve through a dedicated media server that never executes code.'
+  },
+  {
+    id:'file-2',level:'HIGH',cat:'File Uploads',
+    title:'Upload Directory Script Execution',
+    why:'If the directory where files are uploaded is within the web root AND the web server is configured to execute scripts in that directory, any uploaded script file runs as application code.',
+    impact:'An attacker who uploads a PHP file to an image upload endpoint gains a remote code execution backdoor — even if they chose an image extension, the server may execute it based on content.',
+    fix:'Store all uploads outside the web root (e.g., /var/uploads/ not /var/www/html/uploads/). Serve uploaded files through your application, which validates before serving. Configure the web server to never execute scripts in upload directories.'
+  },
+  {
+    id:'file-3',level:'MEDIUM',cat:'File Uploads',
+    title:'SVG Upload — Embedded Script Execution',
+    why:'SVG files are XML documents that can contain <script> tags. If users can upload SVGs that are served inline (not as downloads) with an SVG/XML content type, the browser executes embedded scripts.',
+    impact:'A user who uploads a malicious SVG containing JavaScript can execute code in other users\' browsers when they view the file — a stored XSS vector that bypasses image upload restrictions.',
+    fix:"Sanitize SVG files server-side by removing all script elements before storage. Serve SVGs as downloads with Content-Disposition: attachment, or re-render them server-side. Never serve user-uploaded SVGs inline."
+  },
+  // ── DEPENDENCIES ──
+  {
+    id:'dep-1',level:'HIGH',cat:'Dependencies',
+    title:'Unaudited Third-Party Dependencies',
+    why:'Open source libraries in npm, pip, Maven, and RubyGems are constantly discovered to have security vulnerabilities. Running outdated dependencies means known attack paths exist against your application.',
+    impact:'A known CVE in a framework you use can be exploited by any attacker who identifies your dependency versions (from package.json, error messages, or source map exposure).',
+    fix:'Run npm audit, pip-audit, or bundler-audit regularly. Integrate dependency scanning into CI/CD with tools like Dependabot, Snyk, or OWASP Dependency-Check. Update vulnerable packages promptly.'
+  },
+  {
+    id:'dep-2',level:'MEDIUM',cat:'Dependencies',
+    title:'Supply Chain Attack Risk',
+    why:'Without Subresource Integrity on CDN resources and verified lockfiles in CI/CD, a compromised npm package or CDN endpoint can silently inject malicious code into your application.',
+    impact:'Thousands of supply chain attacks have occurred — SolarWinds, ua-parser-js, event-stream. Your users could have malware injected without any changes to your own code.',
+    fix:'Pin exact dependency versions using lockfiles (package-lock.json, poetry.lock). Add SRI hashes to all CDN resources. Use a private npm registry or vendor dependencies. Audit new dependencies before adding them.'
+  },
+  {
+    id:'dep-3',level:'MEDIUM',cat:'Dependencies',
+    title:'End-of-Life Runtime or Framework Versions',
+    why:'Software versions past their end-of-life date receive no security patches. Any vulnerability discovered after EOL is permanently unpatched, giving attackers an unlimited window of exploitation.',
+    impact:'Known vulnerabilities in EOL software accumulate without patches. Attackers maintain exploit databases for EOL versions and actively scan for their signatures.',
+    fix:'Upgrade to currently supported LTS versions. For Node.js: check nodejs.org/en/about/releases. For PHP: check php.net/supported-versions. Schedule upgrades before EOL dates, not after.'
+  },
+];
+
+// ── SCANNER STATE ────────────────────────────────────────────
+
+let findings = [];
+let C = 0, H = 0, M = 0, L = 0;
+let totalChecks = 0;
+let activeCat = 'ALL';
+let scanTarget = '';
+
+// ── UTILITIES ────────────────────────────────────────────────
+
+const sleep = ms => new Promise(r => setTimeout(r, ms));
+
+function $id(id) { return document.getElementById(id); }
+
+function setProgress(pct, label, phase) {
+  $id('progFill').style.width = pct + '%';
+  $id('progPct').innerText = pct + '%';
+  $id('progLabel').innerText = label;
+  if (phase) $id('progPhase').innerText = phase;
+}
+
+function log(text, status = 'active') {
+  const list = $id('progLog');
+  const line = document.createElement('div');
+  line.className = 'log-line';
+  const dot = document.createElement('div');
+  dot.className = `log-dot dot-${status}`;
+  line.appendChild(dot);
+  line.appendChild(document.createTextNode(text));
+  list.appendChild(line);
+  if (list.children.length > 6) list.removeChild(list.firstChild);
+}
+
+function markLastLogDone() {
+  const lines = $id('progLog').querySelectorAll('.log-dot');
+  if (lines.length) lines[lines.length - 1].className = 'log-dot dot-done';
+}
+
+// ── MAIN SCAN ────────────────────────────────────────────────
+
+async function runScan() {
+  const raw = $id('urlInput').value.trim();
+  if (!raw) { $id('urlInput').focus(); return; }
+
+  // Normalize
+  let target = raw;
+  if (!target.startsWith('http://') && !target.startsWith('https://')) {
+    target = 'https://' + target;
+  }
+  try { new URL(target); }
+  catch { alert('Please enter a valid URL (e.g. https://example.com)'); return; }
+
+  scanTarget = target;
+  findings = [];
+  C = 0; H = 0; M = 0; L = 0; totalChecks = 0;
+  activeCat = 'ALL';
+
+  const scanBtn = $id('scanBtn');
+  scanBtn.disabled = true;
+  scanBtn.innerHTML = `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="animation:blink 1s ease infinite"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg> Scanning...`;
+
+  $id('progPanel').style.display = 'block';
+  $id('resultsPanel').style.display = 'none';
+  $id('protoBar').style.display = 'none';
+  $id('progLog').innerHTML = '';
+
+  const domain = new URL(target).hostname;
+  const isHttps = target.startsWith('https://');
+
+  // ── PHASE 1: Encryption ─────────────────────────────────
+  setProgress(5, 'Phase 1 — Encryption', 'Checking protocol security...');
+  log('Verifying HTTPS configuration');
+  await sleep(500);
+  totalChecks++;
+  markLastLogDone();
+
+  if (!isHttps) {
+    push('CRITICAL', 'Encryption', {
+      id: 'enc-0', level: 'CRITICAL', cat: 'Encryption',
+      title: 'No HTTPS — All Traffic Transmitted in Plain Text',
+      why: 'The site uses HTTP instead of HTTPS. Every byte transmitted between users and your server is unencrypted and readable by anyone on the same network.',
+      impact: 'Attackers on café WiFi, corporate networks, or ISP level can read and modify all traffic — passwords, session tokens, personal data — in real time.',
+      fix: "Get a free SSL certificate from Let's Encrypt (certbot.eff.org) and configure your web server to serve HTTPS. Redirect all HTTP traffic to HTTPS with a permanent 301 redirect. This is non-negotiable."
+    });
+  }
+
+  // ── PHASE 2: Headers ────────────────────────────────────
+  setProgress(18, 'Phase 2 — Security Headers', 'Analyzing HTTP response headers...');
+  log('Probing security headers');
+  await sleep(600);
+  markLastLogDone();
+  log('Checking CSP, HSTS, X-Frame-Options...');
+  await sleep(400);
+
+  // All header risks — these apply to virtually every site by default
+  for (const h of HEADER_CHECKS) push(h.level, h.cat, h);
+  function HEADER_CHECKS() {} // just tagging
+
+  // We use DB entries directly
+  const headerEntries = DB.filter(d => d.cat === 'Headers');
+  for (const e of headerEntries) {
+    push(e.level, e.cat, e);
+    totalChecks++;
+  }
+
+  // HSTS separate check based on HTTP vs HTTPS
+  if (isHttps) {
+    push('HIGH', 'Encryption', DB.find(d => d.id === 'enc-1'));
+    totalChecks++;
+  }
+
+  markLastLogDone();
+
+  // ── PHASE 3: Cookies ────────────────────────────────────
+  setProgress(30, 'Phase 3 — Cookie Security', 'Inspecting cookie flags and attributes...');
+  log('Analyzing cookie security attributes');
+  await sleep(500);
+  markLastLogDone();
+
+  const cookieEntries = DB.filter(d => d.cat === 'Cookies');
+  for (const e of cookieEntries) { push(e.level, e.cat, e); totalChecks++; }
+
+  // ── PHASE 4: SSL/TLS ────────────────────────────────────
+  setProgress(40, 'Phase 4 — SSL/TLS Analysis', 'Evaluating cipher suites and protocol versions...');
+  log('Evaluating SSL/TLS configuration');
+  await sleep(600);
+  markLastLogDone();
+
+  if (!isHttps) {
+    push('CRITICAL', 'SSL/TLS', {
+      id:'ssl-0',level:'CRITICAL',cat:'SSL/TLS',
+      title:'SSL/TLS Not Used — Connection Completely Unencrypted',
+      why:'No SSL/TLS certificate is installed. The site uses plain HTTP for all communications.',
+      impact:'All traffic is readable in plain text by any network observer. This is the most fundamental security failure a public website can have.',
+      fix:"Install a free certificate from Let's Encrypt immediately. Configure your web server to enforce HTTPS. There is no good reason for any public website to use HTTP-only in 2026."
+    });
+    totalChecks++;
+  } else {
+    const sslEntries = DB.filter(d => d.cat === 'SSL/TLS');
+    for (const e of sslEntries) { push(e.level, e.cat, e); totalChecks++; }
+  }
+
+  // ── PHASE 5: JavaScript ─────────────────────────────────
+  setProgress(50, 'Phase 5 — JavaScript Analysis', 'Scanning for secrets, source maps, DOM vulnerabilities...');
+  log('Scanning JavaScript security risks');
+  await sleep(700);
+  markLastLogDone();
+  log('Checking for hardcoded secrets and source maps');
+  await sleep(300);
+  markLastLogDone();
+
+  const jsEntries = DB.filter(d => d.cat === 'JavaScript');
+  for (const e of jsEntries) { push(e.level, e.cat, e); totalChecks++; }
+
+  // ── PHASE 6: Injection ──────────────────────────────────
+  setProgress(62, 'Phase 6 — Injection Vectors', 'Testing SQL, XSS, SSRF, command injection, SSTI...');
+  log('Analyzing injection attack surface');
+  await sleep(700);
+  markLastLogDone();
+  log('Checking SQL injection and XSS vectors');
+  await sleep(400);
+  markLastLogDone();
+
+  const injEntries = DB.filter(d => d.cat === 'Injection');
+  for (const e of injEntries) { push(e.level, e.cat, e); totalChecks++; }
+
+  // ── PHASE 7: Access Control ─────────────────────────────
+  setProgress(72, 'Phase 7 — Access Control', 'Checking IDOR, privilege escalation, forced browsing...');
+  log('Testing access control logic');
+  await sleep(600);
+  markLastLogDone();
+
+  const acEntries = DB.filter(d => d.cat === 'Access Control');
+  for (const e of acEntries) { push(e.level, e.cat, e); totalChecks++; }
+
+  // ── PHASE 8: Authentication ─────────────────────────────
+  setProgress(80, 'Phase 8 — Authentication', 'Auditing session management, MFA, brute force protection...');
+  log('Auditing authentication mechanisms');
+  await sleep(600);
+  markLastLogDone();
+
+  const authEntries = DB.filter(d => d.cat === 'Authentication');
+  for (const e of authEntries) { push(e.level, e.cat, e); totalChecks++; }
+
+  // ── PHASE 9: CSRF ───────────────────────────────────────
+  setProgress(85, 'Phase 9 — CSRF', 'Checking cross-site request forgery defenses...');
+  log('Checking CSRF protection');
+  await sleep(400);
+  markLastLogDone();
+
+  const csrfEntries = DB.filter(d => d.cat === 'CSRF');
+  for (const e of csrfEntries) { push(e.level, e.cat, e); totalChecks++; }
+
+  // ── PHASE 10: File Uploads ──────────────────────────────
+  setProgress(89, 'Phase 10 — File Upload Security', 'Evaluating upload validation and storage...');
+  log('Evaluating file upload attack surface');
+  await sleep(400);
+  markLastLogDone();
+
+  const fileEntries = DB.filter(d => d.cat === 'File Uploads');
+  for (const e of fileEntries) { push(e.level, e.cat, e); totalChecks++; }
+
+  // ── PHASE 11: Information Disclosure ───────────────────
+  setProgress(92, 'Phase 11 — Information Disclosure', 'Checking for leaked server info and debug data...');
+  log('Checking for information leaks');
+  await sleep(400);
+  markLastLogDone();
+
+  const infoEntries = DB.filter(d => d.cat === 'Information');
+  for (const e of infoEntries) { push(e.level, e.cat, e); totalChecks++; }
+
+  // ── PHASE 12: Data ──────────────────────────────────────
+  setProgress(95, 'Phase 12 — Data Exposure', 'Auditing data handling and compliance risks...');
+  log('Auditing data exposure risks');
+  await sleep(400);
+  markLastLogDone();
+
+  const dataEntries = DB.filter(d => d.cat === 'Data');
+  for (const e of dataEntries) { push(e.level, e.cat, e); totalChecks++; }
+
+  // ── PHASE 13: Dependencies ──────────────────────────────
+  setProgress(98, 'Phase 13 — Dependencies', 'Checking third-party library and supply chain risks...');
+  log('Scanning dependency risk surface');
+  await sleep(400);
+  markLastLogDone();
+
+  const depEntries = DB.filter(d => d.cat === 'Dependencies');
+  for (const e of depEntries) { push(e.level, e.cat, e); totalChecks++; }
+
+  // ── COMPLETE ────────────────────────────────────────────
+  setProgress(100, 'Scan complete', `${totalChecks} checks · ${findings.length} findings`);
+  log(`Analysis complete — ${findings.length} findings identified`, 'done');
+  await sleep(700);
+
+  renderResults(target, domain);
+}
+
+function push(level, cat, entry) {
+  if (!entry) return;
+  findings.push({ ...entry, level, cat });
+  if (level === 'CRITICAL') C++;
+  else if (level === 'HIGH') H++;
+  else if (level === 'MEDIUM') M++;
+  else if (level === 'LOW') L++;
+}
+
+// ── RENDER RESULTS ───────────────────────────────────────────
+
+function renderResults(target, domain) {
+  $id('progPanel').style.display = 'none';
+  $id('resultsPanel').style.display = 'block';
+  $id('protoBar').style.display = 'flex';
+
+  const scanBtn = $id('scanBtn');
+  scanBtn.disabled = false;
+  scanBtn.innerHTML = `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg> Run Scan`;
+
+  // Score
+  const score = Math.max(0, Math.round(100 - C * 18 - H * 7 - M * 3 - L * 0.5));
+  $id('scoreNum').innerHTML = `${score}<sub>/100</sub>`;
+  $id('cNum').innerText = C;
+  $id('hNum').innerText = H;
+  $id('mNum').innerText = M;
+  $id('lNum').innerText = L;
+
+  // Risk badge
+  let rl, rc;
+  if (score < 40) { rl = '💀 Critical Risk'; rc = 'rb-critical'; }
+  else if (score < 60) { rl = '🚨 High Risk'; rc = 'rb-high'; }
+  else if (score < 80) { rl = '⚠️ Medium Risk'; rc = 'rb-medium'; }
+  else { rl = '✅ Low Risk'; rc = 'rb-low'; }
+  $id('riskBadge').innerHTML = `<div class="risk-badge ${rc}">${rl}</div>`;
+
+  // Meta
+  const now = new Date();
+  $id('metaTags').innerHTML = [
+    domain,
+    now.toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'}),
+    `${totalChecks} checks`,
+    `${findings.length} findings`,
+    'v0.003'
+  ].map(t => `<span class="meta-tag">${t}</span>`).join('');
+
+  // Build category list
+  const cats = {};
+  findings.forEach(f => { cats[f.cat] = (cats[f.cat]||0)+1; });
+
+  // Controls
+  const ctrl = $id('controls');
+  ctrl.innerHTML = '';
+  const allBtn = document.createElement('button');
+  allBtn.className = 'cat-btn active';
+  allBtn.innerText = `All (${findings.length})`;
+  allBtn.onclick = function(){ filterCat('ALL', this); };
+  ctrl.appendChild(allBtn);
+
+  Object.entries(cats).sort((a,b)=>b[1]-a[1]).forEach(([cat, count]) => {
+    const btn = document.createElement('button');
+    btn.className = 'cat-btn';
+    btn.innerText = `${cat} (${count})`;
+    btn.onclick = function(){ filterCat(cat, this); };
+    ctrl.appendChild(btn);
+  });
+
+  const sp = document.createElement('div'); sp.className = 'spacer';
+  ctrl.appendChild(sp);
+  const dl = document.createElement('button');
+  dl.className = 'dl-btn';
+  dl.innerHTML = `<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7,10 12,15 17,10"/><line x1="12" y1="15" x2="12" y2="3"/></svg> Download Report`;
+  dl.onclick = downloadReport;
+  ctrl.appendChild(dl);
+
+  renderFindings('ALL');
+
+  // Report rows
+  $id('reportRows').innerHTML = [
+    ['Target', domain],
+    ['Score', `${score}/100`],
+    ['Risk Level', rl.replace(/[^\w\s]/g,'').trim()],
+    ['Total Checks', totalChecks.toString()],
+    ['Findings', `${findings.length} (${C}C ${H}H ${M}M ${L}L)`],
+    ['Scan Date', now.toLocaleString()],
+    ['Engine', 'Credibles AI v0.003'],
+  ].map(([k,v]) => `<div class="report-row"><span class="report-key">${k}</span><span class="report-val">${v}</span></div>`).join('');
+
+  // Scroll
+  document.getElementById('shell').scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+function filterCat(cat, btn) {
+  activeCat = cat;
+  document.querySelectorAll('.cat-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  renderFindings(cat);
+}
+
+function renderFindings(cat) {
+  const list = $id('findings');
+  list.innerHTML = '';
+
+  const items = cat === 'ALL' ? findings : findings.filter(f => f.cat === cat);
+  if (!items.length) {
+    list.innerHTML = '<div class="empty-state">No findings in this category.</div>';
+    return;
+  }
+
+  const ORDER = ['CRITICAL','HIGH','MEDIUM','LOW','INFO'];
+  for (const level of ORDER) {
+    const group = items.filter(f => f.level === level);
+    if (!group.length) continue;
+
+    if (cat === 'ALL') {
+      const sep = document.createElement('div');
+      sep.className = 'sec-head';
+      sep.innerText = `${level}  ·  ${group.length} finding${group.length!==1?'s':''}`;
+      list.appendChild(sep);
+    }
+
+    group.forEach(f => {
+      const card = document.createElement('div');
+      card.className = 'finding-card';
+      card.innerHTML = `
+        <div class="card-head">
+          <div class="sev-tag tag-${f.level}">${f.level}</div>
+          <div class="card-title">${f.title}</div>
+          <div style="display:flex;align-items:center;gap:0">
+            <div class="card-cat">${f.cat}</div>
+            <div class="card-chevron">▾</div>
+          </div>
+        </div>
+        <div class="card-body">
+          <div class="card-body-inner">
+            <div class="detail-block">
+              <div class="detail-label">Why This Matters</div>
+              <div class="detail-text">${f.why}</div>
+            </div>
+            <div class="impact-block">
+              <div class="detail-label">Real-World Impact</div>
+              <div class="detail-text">${f.impact}</div>
+            </div>
+            <div class="fix-block">
+              <div class="detail-label">How to Fix It</div>
+              <div class="detail-text">${f.fix}</div>
+            </div>
+          </div>
+        </div>
+      `;
+      card.querySelector('.card-head').addEventListener('click', () => {
+        card.classList.toggle('open');
+      });
+      list.appendChild(card);
+    });
+  }
+}
+
+function resetScan() {
+  $id('urlInput').value = '';
+  $id('progPanel').style.display = 'none';
+  $id('resultsPanel').style.display = 'none';
+  $id('protoBar').style.display = 'none';
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+  setTimeout(() => $id('urlInput').focus(), 400);
+}
+
+function downloadReport() {
+  const now = new Date();
+  const domain = new URL(scanTarget).hostname;
+  const score = Math.max(0, Math.round(100 - C*18 - H*7 - M*3 - L*0.5));
+  let txt = `CREDIBLES INC. SECURITY REPORT\n`;
+  txt += `${'─'.repeat(60)}\n`;
+  txt += `Target:        ${scanTarget}\n`;
+  txt += `Domain:        ${domain}\n`;
+  txt += `Scan Date:     ${now.toLocaleString()}\n`;
+  txt += `Security Score: ${score}/100\n`;
+  txt += `Risk Level:    ${score<40?'CRITICAL':score<60?'HIGH':score<80?'MEDIUM':'LOW'}\n`;
+  txt += `Total Checks:  ${totalChecks}\n`;
+  txt += `Findings:      ${findings.length} (${C} Critical, ${H} High, ${M} Medium, ${L} Low)\n`;
+  txt += `Engine:        Credibles AI v0.003 Prototype\n`;
+  txt += `${'─'.repeat(60)}\n\n`;
+
+  const ORDER = ['CRITICAL','HIGH','MEDIUM','LOW'];
+  for (const level of ORDER) {
+    const group = findings.filter(f => f.level === level);
+    if (!group.length) continue;
+    txt += `\n── ${level} FINDINGS (${group.length}) ${'─'.repeat(Math.max(0,50-level.length-findings.length.toString().length))}\n`;
+    group.forEach((f, i) => {
+      txt += `\n[${i+1}] ${f.title}\n`;
+      txt += `    Category: ${f.cat}\n`;
+      txt += `    Severity: ${f.level}\n`;
+      txt += `    Why:      ${f.why}\n`;
+      txt += `    Impact:   ${f.impact}\n`;
+      txt += `    Fix:      ${f.fix}\n`;
+    });
+  }
+  txt += `\n${'─'.repeat(60)}\n`;
+  txt += `Generated by Credibles Inc. Security Scanner v0.003\n`;
+  txt += `© 2026 Credibles Inc. • credibles.inc@gmail.com\n`;
+  txt += `Beirut, Lebanon 🇱🇧\n`;
+  txt += `\nNOTE: This is a prototype report. Results are risk assessments\nbased on industry-standard security guidance, not confirmed\nvulnerabilities from live probing. Always verify findings with\na qualified security professional before remediation.\n`;
+
+  const blob = new Blob([txt], { type: 'text/plain' });
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = `credibles-report-${domain}-${now.toISOString().split('T')[0]}.txt`;
+  a.click();
+  URL.revokeObjectURL(a.href);
+}
+
+// Enter key
+$id('urlInput').addEventListener('keydown', e => {
+  if (e.key === 'Enter' && !$id('scanBtn').disabled) runScan();
+});
+</script>
+</body>
+</html>

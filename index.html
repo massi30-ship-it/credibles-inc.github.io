@@ -1,876 +1,1316 @@
+
+
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Credibles Inc. | Your Shield. Powered By AI.</title>
-  <meta name="description" content="Credibles Inc. is an AI-powered cybersecurity company building autonomous vulnerability detection, analysis, and fixing for websites, apps, and digital infrastructure." />
-
-  <!-- Favicon: gold triangle mark -->
-  <link rel="icon" type="image/svg+xml" href="favicon.svg" />
-  <link rel="alternate icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Cpolygon points='0,100 100,0 100,100' fill='%23C5A870'/%3E%3C/svg%3E" />
-
-  <!-- Open Graph / social -->
-  <meta property="og:type" content="website" />
-  <meta property="og:title" content="Credibles Inc. | Your Shield. Powered By AI." />
-  <meta property="og:description" content="An autonomous AI cybersecurity platform that detects, analyzes, fixes, and continuously monitors vulnerabilities across websites, applications, and digital infrastructure." />
-  <meta property="og:image" content="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' fill='%230a0b0d'/%3E%3Cpolygon points='18,82 82,18 82,82' fill='%23C5A870'/%3E%3C/svg%3E" />
-  <meta name="twitter:card" content="summary_large_image" />
-  <meta name="twitter:title" content="Credibles Inc. | Your Shield. Powered By AI." />
-  <meta name="twitter:description" content="An autonomous AI cybersecurity platform that detects, analyzes, fixes, and continuously monitors vulnerabilities." />
-
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
-
+  <link rel="icon" type="image/png" href="favicon.png" />
+  <meta
+    name="description"
+    content="Credibles Inc. is an AI-powered cybersecurity company building autonomous vulnerability detection, analysis, and fixing for websites, apps, and digital infrastructure."
+  />
   <style>
-  :root{
-    --bg:#0a0b0d; --bg-2:#0f1113; --surface:#121418; --surface-2:#171a1f;
-    --line:#23272e; --line-2:#2d323b;
-    --text:#e9ebee; --muted:#969ca6; --muted-2:#6a707a;
-    --accent:#0071e3; --accent-2:#3b9bff; --accent-soft:rgba(0,113,227,.14);
-    --gold:#C5A870;
-    --critical:#f04438; --high:#f79009; --medium:#eab308; --low:#3b9bff; --ok:#22c55e;
-    --r-xl:22px; --r-lg:16px; --r-md:12px;
-    --max:1200px;
-    --f-display:"Space Grotesk","Inter",system-ui,sans-serif;
-    --f-sans:"Inter",system-ui,-apple-system,"Segoe UI",sans-serif;
+    .demo-shell {
+  margin-top: 20px;
+  padding: 22px;
+  border-radius: 28px;
+  background: rgba(255,255,255,0.72);
+  border: 1px solid rgba(0,0,0,0.05);
+  box-shadow: 0 20px 60px rgba(0,0,0,0.08);
+  backdrop-filter: blur(18px);
+}
+
+.demo-top {
+  text-align: center;
+  margin-bottom: 16px;
+}
+
+.demo-input-wrap {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+  flex-wrap: wrap;
+  margin-bottom: 12px;
+}
+
+.demo-input,
+.demo-select {
+  min-height: 50px;
+  padding: 0 16px;
+  border-radius: 14px;
+  border: 1px solid #d2d2d7;
+  background: white;
+  font-size: 15px;
+  color: #1d1d1f;
+}
+
+.demo-input {
+  min-width: 260px;
+}
+
+.demo-select {
+  min-width: 190px;
+}
+
+.demo-note {
+  margin: 0;
+  color: #6e6e73;
+  font-size: 14px;
+}
+
+.demo-status {
+  text-align: center;
+  font-weight: 700;
+  color: #1d1d1f;
+  margin: 18px 0 10px;
+}
+
+.demo-dashboard {
+  margin-top: 18px;
+}
+
+.demo-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 18px;
+  margin-bottom: 18px;
+}
+
+.demo-card {
+  background: rgba(255,255,255,0.88);
+  border-radius: 24px;
+  border: 1px solid rgba(0,0,0,0.05);
+  box-shadow: 0 12px 34px rgba(0,0,0,0.06);
+  padding: 24px;
+}
+
+.demo-label {
+  font-size: 13px;
+  font-weight: 700;
+  color: #6e6e73;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  margin-bottom: 8px;
+}
+
+.demo-big-number {
+  font-size: 48px;
+  line-height: 1;
+  letter-spacing: -0.05em;
+  font-weight: 800;
+  margin-bottom: 8px;
+}
+
+.demo-big-text {
+  font-size: 34px;
+  line-height: 1.05;
+  letter-spacing: -0.04em;
+  font-weight: 800;
+  margin-bottom: 8px;
+}
+
+.demo-small {
+  color: #6e6e73;
+  font-size: 14px;
+}
+
+.critical { color: #dc2626; }
+.high { color: #ea580c; }
+.medium { color: #ca8a04; }
+.low { color: #2563eb; }
+.protected { color: #16a34a; }
+
+.demo-results {
+  display: grid;
+  grid-template-columns: 1.2fr 0.8fr;
+  gap: 18px;
+}
+
+.demo-results-left,
+.demo-results-right {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.vuln-card h3,
+.report-title {
+  margin: 0 0 8px;
+  font-size: 22px;
+  line-height: 1.15;
+  letter-spacing: -0.02em;
+}
+
+.vuln-header {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  align-items: flex-start;
+}
+
+.vuln-meta {
+  margin: 0;
+  color: #6e6e73;
+  font-size: 15px;
+}
+
+.severity {
+  display: inline-block;
+  min-width: 82px;
+  text-align: center;
+  padding: 8px 12px;
+  border-radius: 999px;
+  font-size: 13px;
+  font-weight: 700;
+  background: #f5f5f7;
+}
+
+.vuln-actions {
+  margin-top: 16px;
+}
+
+.report-row {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 10px 0;
+  border-bottom: 1px solid #ececf1;
+  font-size: 15px;
+}
+
+.report-row:last-child {
+  border-bottom: none;
+}
+
+.plan-features {
+  margin: 0;
+  padding-left: 18px;
+  color: #2f2f33;
+  font-size: 15px;
+}
+
+.final-btn {
+  margin-top: 18px;
+}
+
+@media (max-width: 1040px) {
+  .demo-grid,
+  .demo-results {
+    grid-template-columns: 1fr;
   }
-  *{box-sizing:border-box}
-  html{scroll-behavior:smooth}
-  body{
-    margin:0;background:var(--bg);color:var(--text);
-    font-family:var(--f-sans);font-size:16px;line-height:1.65;
-    -webkit-font-smoothing:antialiased;overflow-x:hidden;
-  }
-  a{color:inherit;text-decoration:none}
-  img,svg{display:block}
-  h1,h2,h3,h4{font-family:var(--f-display);font-weight:600;letter-spacing:-.02em;line-height:1.08;margin:0}
-  p{margin:0}
-  ::selection{background:var(--accent);color:#fff}
-  :focus-visible{outline:2px solid var(--accent-2);outline-offset:2px;border-radius:6px}
-  .wrap{width:min(92%,var(--max));margin:0 auto}
-  .section{padding:clamp(56px,9vw,104px) 0}
-  .eyebrow{font-family:var(--f-sans);font-size:12.5px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--accent-2)}
-  .muted{color:var(--muted)}
-  .center{text-align:center}
+}
+    :root {
+      --bg: #f5f5f7;
+      --bg-2: #ffffff;
+      --text: #1d1d1f;
+      --muted: #6e6e73;
+      --line: #d2d2d7;
+      --accent: #0071e3;
+      --accent-soft: #5ac8fa;
+      --card: rgba(255, 255, 255, 0.82);
+      --shadow: 0 20px 60px rgba(0, 0, 0, 0.08);
+      --shadow-soft: 0 12px 34px rgba(0, 0, 0, 0.06);
+      --radius-xl: 34px;
+      --radius-lg: 26px;
+      --radius-md: 20px;
+      --max: 1240px;
+    }
 
-  /* buttons */
-  .btn{display:inline-flex;align-items:center;justify-content:center;gap:9px;min-height:46px;padding:0 20px;border-radius:10px;font-weight:600;font-size:14.5px;border:1px solid transparent;cursor:pointer;transition:transform .2s ease,background .2s ease,border-color .2s ease,box-shadow .2s ease;font-family:var(--f-sans)}
-  .btn-primary{background:var(--accent);color:#fff}
-  .btn-primary:hover{background:var(--accent-2);transform:translateY(-1px)}
-  .btn-ghost{background:transparent;color:var(--text);border-color:var(--line-2)}
-  .btn-ghost:hover{border-color:var(--muted);background:var(--surface-2);transform:translateY(-1px)}
-  .btn-sm{min-height:38px;padding:0 14px;font-size:13px;border-radius:8px}
+    * {
+      box-sizing: border-box;
+    }
 
-  /* logo */
-  .logo{display:inline-flex;align-items:center;gap:11px;font-family:var(--f-display);font-weight:600;font-size:17px;letter-spacing:-.01em}
-  .logo-mark{width:26px;height:26px;flex:none}
+    html {
+      scroll-behavior: smooth;
+    }
 
-  /* nav */
-  .nav{position:sticky;top:0;z-index:1000;background:rgba(10,11,13,.72);backdrop-filter:blur(14px);border-bottom:1px solid var(--line)}
-  .nav-inner{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:14px 0;width:min(92%,var(--max));margin:0 auto}
-  .nav-links{display:flex;align-items:center;gap:26px}
-  .nav-links a{font-size:14px;color:var(--muted);font-weight:500;transition:color .2s ease}
-  .nav-links a:hover{color:var(--text)}
-  .nav-cta{display:flex;align-items:center;gap:12px}
-  .nav-toggle{display:none;width:42px;height:42px;border:1px solid var(--line-2);border-radius:10px;background:var(--surface);color:var(--text);align-items:center;justify-content:center}
-  @media(max-width:900px){
-    .nav-links{display:none;position:absolute;top:64px;left:0;right:0;flex-direction:column;align-items:flex-start;gap:4px;padding:14px 4%;background:var(--bg-2);border-bottom:1px solid var(--line)}
-    .nav-links.open{display:flex}
-    .nav-links a{padding:10px 0;font-size:16px}
-    .nav-toggle{display:inline-flex}
-    .nav .btn-nav{display:none}
-  }
+    body {
+      margin: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Arial, sans-serif;
+      background:
+        radial-gradient(circle at top center, rgba(90, 200, 250, 0.15), transparent 34%),
+        linear-gradient(180deg, #fbfbfd 0%, #f5f5f7 50%, #f3f3f5 100%);
+      color: var(--text);
+      line-height: 1.6;
+      overflow-x: hidden;
+    }
 
-  /* hero */
-  .hero{position:relative;padding:clamp(64px,11vw,120px) 0 48px;text-align:center;border-bottom:1px solid var(--line);overflow:hidden}
-  .hero::before{content:"";position:absolute;inset:-40% 0 auto 0;height:620px;background:radial-gradient(ellipse 60% 100% at 50% 0,rgba(0,113,227,.16),transparent 70%);pointer-events:none}
-  .hero>*{position:relative}
-  .badge{display:inline-flex;align-items:center;gap:8px;padding:6px 13px;border:1px solid var(--line-2);border-radius:999px;background:var(--surface);font-size:12.5px;font-weight:600;color:var(--muted);margin-bottom:22px}
-  .badge .dot{width:7px;height:7px;border-radius:50%;background:var(--ok);box-shadow:0 0 0 4px rgba(34,197,94,.14)}
-  h1.hero-h1{font-size:clamp(44px,8vw,92px);letter-spacing:-.045em;margin:6px 0 0}
-  .tagline{max-width:760px;margin:16px auto 14px;font-size:clamp(19px,2.4vw,26px);color:var(--text);font-family:var(--f-display);font-weight:500;letter-spacing:-.02em}
-  .small-desc{max-width:760px;margin:0 auto;font-size:17px;color:var(--muted)}
-  .hero-actions{display:flex;flex-direction:column;align-items:center;gap:14px;margin-top:30px}
+    a {
+      color: inherit;
+    }
 
-  /* waitlist form */
-  .waitlist{display:flex;gap:10px;flex-wrap:wrap;justify-content:center;width:100%;max-width:460px}
-  .waitlist input[type=email]{flex:1;min-width:200px;min-height:48px;padding:0 16px;border-radius:10px;border:1px solid var(--line-2);background:var(--surface);color:var(--text);font-size:15px;font-family:var(--f-sans)}
-  .waitlist input::placeholder{color:var(--muted-2)}
-  .waitlist .btn{min-height:48px}
-  .form-note{font-size:13px;color:var(--muted-2);margin-top:4px}
-  .form-note a{color:var(--muted);text-decoration:underline;text-underline-offset:2px}
-  .form-success{display:none;align-items:center;gap:9px;justify-content:center;color:var(--ok);font-weight:600;font-size:15px;padding:12px 16px;border:1px solid rgba(34,197,94,.3);background:rgba(34,197,94,.08);border-radius:10px;max-width:460px}
-  .form-success.on{display:flex}
-  .waitlist.hide{display:none}
+    .wrap {
+      width: min(92%, var(--max));
+      margin: 0 auto;
+    }
 
-  /* generic cards */
-  .grid{display:grid;gap:18px}
-  .g-3{grid-template-columns:repeat(3,1fr)}
-  .g-2{grid-template-columns:repeat(2,1fr)}
-  .card{background:var(--surface);border:1px solid var(--line);border-radius:var(--r-lg);padding:26px;transition:transform .25s ease,border-color .25s ease,background .25s ease}
-  .card:hover{transform:translateY(-3px);border-color:var(--line-2);background:var(--surface-2)}
-  .card h3{font-size:19px;margin-bottom:8px}
-  .card p{font-size:14.5px;color:var(--muted)}
-  .stat-label{font-size:12px;font-weight:700;letter-spacing:.09em;text-transform:uppercase;color:var(--muted-2);margin-bottom:10px}
-  .stat-value{font-family:var(--f-display);font-size:30px;font-weight:700;letter-spacing:-.03em;margin-bottom:8px}
-  .stat-value.accent{color:var(--accent-2)}
+    .nav {
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      backdrop-filter: blur(18px);
+      background: rgba(245, 245, 247, 0.72);
+      border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+    }
 
-  .icon{width:40px;height:40px;border-radius:10px;display:flex;align-items:center;justify-content:center;background:var(--accent-soft);border:1px solid rgba(0,113,227,.22);color:var(--accent-2);margin-bottom:16px}
-  .icon svg{width:21px;height:21px}
+    .nav-inner {
+      width: min(92%, var(--max));
+      margin: 0 auto;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 14px 0;
+      gap: 16px;
+    }
 
-  .sec-head{max-width:720px;margin:0 auto clamp(34px,5vw,52px)}
-  .sec-head.center{text-align:center}
-  .section-title{font-size:clamp(30px,4.4vw,50px);letter-spacing:-.04em;margin:0 0 14px}
-  .section-subtitle{color:var(--muted);font-size:17.5px;margin:0}
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-weight: 700;
+      font-size: 18px;
+      letter-spacing: -0.02em;
+    }
 
-  /* problem big numbers */
-  .bignum-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin-bottom:28px}
-  .bignum{background:var(--surface);border:1px solid var(--line);border-radius:var(--r-lg);padding:28px}
-  .bignum .n{font-family:var(--f-display);font-size:clamp(30px,4vw,44px);font-weight:700;letter-spacing:-.04em;line-height:1}
-  .bignum .n.accent{color:var(--accent-2)}
-  .bignum .l{color:var(--muted);font-size:14px;margin-top:10px}
-  .prose{max-width:860px;margin:0 auto;color:var(--muted);font-size:17px}
-  .prose.text{color:#c5c9cf}
+    .brand img {
+      width: 38px;
+      height: 38px;
+      object-fit: contain;
+      border-radius: 12px;
+      background: white;
+      padding: 5px;
+      border: 1px solid rgba(0, 0, 0, 0.06);
+      box-shadow: var(--shadow-soft);
+    }
 
-  /* about split */
-  .split{display:grid;grid-template-columns:1.5fr .9fr;gap:22px;align-items:start}
-  .panel{background:var(--surface);border:1px solid var(--line);border-radius:var(--r-xl);padding:clamp(24px,3vw,38px)}
-  .panel h2{font-size:clamp(26px,3vw,38px);letter-spacing:-.035em;margin:0 0 14px}
-  .panel h3{font-size:20px;margin:26px 0 8px;color:var(--text)}
-  .panel h3:first-of-type{margin-top:0}
-  .panel p{color:#c5c9cf;font-size:16px}
-  .ownership{margin-top:14px;padding:14px 16px;border-left:2px solid var(--gold);background:rgba(197,168,112,.07);border-radius:0 10px 10px 0;color:#d7dade;font-size:15.5px}
-  .sidecol{display:flex;flex-direction:column;gap:18px}
-  .side{background:var(--surface);border:1px solid var(--line);border-radius:var(--r-lg);padding:24px}
-  .side h3{font-size:16px;margin:0 0 12px}
-  .side p{margin:7px 0;color:var(--muted);font-size:14.5px}
-  .side p strong{color:var(--text);font-weight:600}
-  .quote-side{font-style:italic;color:#d7dade;font-size:15.5px;line-height:1.7;border-left:2px solid var(--accent);padding-left:14px}
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      flex-wrap: wrap;
+    }
 
-  /* feature list -> within about we convert the 6 AI items to cards below */
-  .feat h3{font-size:17px;margin:0 0 7px}
-  .feat p{font-size:14.5px;color:var(--muted)}
-  .feat .k{color:var(--text);font-weight:600}
+    .nav-links a {
+      text-decoration: none;
+      color: var(--muted);
+      font-size: 14px;
+      font-weight: 500;
+      transition: 0.2s ease;
+    }
 
-  /* comparison table */
-  .cmp-wrap{overflow-x:auto;border:1px solid var(--line);border-radius:var(--r-lg);background:var(--surface)}
-  table.cmp{width:100%;border-collapse:collapse;min-width:560px;font-size:14.5px}
-  table.cmp th,table.cmp td{padding:15px 16px;text-align:left;border-bottom:1px solid var(--line)}
-  table.cmp thead th{font-family:var(--f-display);font-weight:600;color:var(--muted);font-size:14px;background:var(--bg-2)}
-  table.cmp thead th.us{color:var(--accent-2)}
-  table.cmp tbody tr:last-child td{border-bottom:none}
-  table.cmp td.feat-name{color:var(--text);font-weight:500}
-  .yes{color:var(--ok);font-weight:700}
-  .no{color:var(--muted-2)}
-  .cmp-cap{color:var(--muted);font-size:14px;margin-top:14px;max-width:860px}
+    .nav-links a:hover {
+      color: var(--text);
+    }
 
-  /* pricing */
-  .pricing-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px}
-  .price{background:var(--surface);border:1px solid var(--line);border-radius:var(--r-lg);padding:26px;display:flex;flex-direction:column}
-  .price.featured{border-color:rgba(0,113,227,.5);box-shadow:0 0 0 1px rgba(0,113,227,.25),0 20px 50px -24px rgba(0,113,227,.5)}
-  .price-tag{align-self:flex-start;font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--accent-2);background:var(--accent-soft);border:1px solid rgba(0,113,227,.3);padding:4px 9px;border-radius:999px;margin-bottom:12px}
-  .price-name{font-family:var(--f-display);font-weight:600;font-size:17px;margin-bottom:6px}
-  .price-amt{font-family:var(--f-display);font-size:38px;font-weight:700;letter-spacing:-.04em;line-height:1}
-  .price-amt span{font-size:14px;font-weight:500;color:var(--muted);letter-spacing:0}
-  .price-desc{color:var(--muted);font-size:14px;margin:12px 0 16px;min-height:40px}
-  .price ul{list-style:none;margin:0 0 20px;padding:0;display:flex;flex-direction:column;gap:10px}
-  .price li{display:flex;gap:9px;align-items:flex-start;font-size:14px;color:#cdd1d7}
-  .price li svg{width:16px;height:16px;flex:none;margin-top:3px;color:var(--accent-2)}
-  .price .inc{font-size:12.5px;color:var(--muted-2);margin:-4px 0 12px}
-  .price .btn{margin-top:auto}
+    .hero {
+      padding: 90px 0 56px;
+      text-align: center;
+      position: relative;
+      isolation: isolate;
+    }
 
-  /* roadmap timeline */
-  .timeline{max-width:760px;margin:0 auto;position:relative;padding-left:30px}
-  .timeline::before{content:"";position:absolute;left:7px;top:6px;bottom:6px;width:2px;background:var(--line-2)}
-  .tl-item{position:relative;padding:0 0 26px 22px}
-  .tl-item:last-child{padding-bottom:0}
-  .tl-item::before{content:"";position:absolute;left:-30px;top:3px;width:16px;height:16px;border-radius:50%;background:var(--bg);border:2px solid var(--accent);box-shadow:0 0 0 4px rgba(0,113,227,.12)}
-  .tl-year{font-family:var(--f-display);font-weight:700;font-size:15px;color:var(--accent-2);letter-spacing:.02em}
-  .tl-text{color:#c5c9cf;font-size:15.5px;margin-top:3px}
+    .hero::before {
+      content: "";
+      position: absolute;
+      left: 50%;
+      top: -120px;
+      transform: translateX(-50%);
+      width: 1100px;
+      height: 1100px;
+      background:
+        radial-gradient(circle, rgba(0, 113, 227, 0.12), transparent 48%),
+        radial-gradient(circle at 60% 40%, rgba(90, 200, 250, 0.18), transparent 30%);
+      filter: blur(20px);
+      pointer-events: none;
+      z-index: -1;
+    }
 
-  /* founder */
-  .founder-card{background:var(--surface);border:1px solid var(--line);border-radius:var(--r-xl);padding:clamp(28px,4vw,48px);max-width:960px;margin:0 auto;display:grid;grid-template-columns:1fr .85fr;gap:30px;align-items:center}
-  .founder-quote{font-family:var(--f-display);font-weight:500;font-size:clamp(20px,2.4vw,28px);line-height:1.4;letter-spacing:-.02em;color:#fff}
-  .founder-quote .mark{color:var(--gold);font-size:40px;line-height:0;vertical-align:-4px;margin-right:4px}
-  .founder-by{margin-top:18px;color:var(--muted);font-size:15px}
-  .founder-by strong{color:var(--text)}
-  .founder-facts{border-left:1px solid var(--line);padding-left:28px}
-  .founder-facts p{margin:8px 0;font-size:14.5px;color:var(--muted)}
-  .founder-facts p strong{color:var(--text);font-weight:600}
-  @media(max-width:760px){.founder-card{grid-template-columns:1fr}.founder-facts{border-left:none;border-top:1px solid var(--line);padding-left:0;padding-top:22px}}
+    .hero-logo {
+      width: 112px;
+      height: 112px;
+      object-fit: contain;
+      border-radius: 28px;
+      background: rgba(255, 255, 255, 0.9);
+      padding: 12px;
+      border: 1px solid rgba(0, 0, 0, 0.06);
+      box-shadow: var(--shadow);
+      opacity: 0;
+      transform: translateY(18px);
+      animation: fadeUp 0.8s ease forwards;
+    }
 
-  /* final cta */
-  .cta-band{background:linear-gradient(180deg,var(--surface-2),var(--surface));border:1px solid var(--line-2);border-radius:var(--r-xl);padding:clamp(34px,5vw,62px);text-align:center;position:relative;overflow:hidden}
-  .cta-band::before{content:"";position:absolute;inset:auto 0 -60% 0;height:400px;background:radial-gradient(ellipse 50% 100% at 50% 100%,rgba(0,113,227,.2),transparent 70%)}
-  .cta-band>*{position:relative}
-  .cta-band h2{font-size:clamp(30px,4.4vw,50px);letter-spacing:-.04em;margin:0 0 12px}
-  .cta-band p{max-width:640px;margin:0 auto 24px;color:var(--muted);font-size:17px}
-  .cta-band .waitlist,.cta-band .form-success{margin:0 auto}
+    .eyebrow {
+      margin: 24px 0 12px;
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--accent);
+      opacity: 0;
+      transform: translateY(18px);
+      animation: fadeUp 0.8s ease 0.1s forwards;
+    }
 
-  /* footer */
-  .footer{border-top:1px solid var(--line);padding:48px 0 40px;margin-top:40px}
-  .footer-top{display:flex;justify-content:space-between;align-items:flex-start;gap:28px;flex-wrap:wrap;margin-bottom:28px}
-  .footer-links{display:flex;gap:22px;flex-wrap:wrap}
-  .footer-links a{color:var(--muted);font-size:14px}
-  .footer-links a:hover{color:var(--text)}
-  .footer .part{color:var(--gold);font-size:14px;margin-top:8px;font-weight:500}
-  .footer .contact{color:var(--muted);font-size:14px;margin-top:8px}
-  .footer .contact a{color:var(--accent-2)}
-  .footer-bottom{border-top:1px solid var(--line);padding-top:22px;color:var(--muted-2);font-size:13.5px}
+    h1 {
+      margin: 0;
+      font-size: clamp(52px, 8vw, 100px);
+      line-height: 0.96;
+      letter-spacing: -0.055em;
+      font-weight: 800;
+      opacity: 0;
+      transform: translateY(18px);
+      animation: fadeUp 0.8s ease 0.18s forwards;
+    }
 
-  /* reveal */
-  .reveal{opacity:0;transform:translateY(22px);transition:opacity .7s ease,transform .7s ease}
-  .reveal.visible{opacity:1;transform:none}
+    .tagline {
+      max-width: 880px;
+      margin: 18px auto 16px;
+      font-size: clamp(22px, 2.5vw, 34px);
+      line-height: 1.25;
+      color: var(--muted);
+      letter-spacing: -0.03em;
+      opacity: 0;
+      transform: translateY(18px);
+      animation: fadeUp 0.8s ease 0.26s forwards;
+    }
 
-  /* ===== DEMO (dark) ===== */
-  .demo-shell{margin-top:18px;padding:22px;border-radius:var(--r-xl);background:var(--surface);border:1px solid var(--line)}
-  .demo-top{text-align:center;margin-bottom:14px}
-  .demo-input-wrap{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-bottom:12px}
-  .demo-input,.demo-select{min-height:48px;padding:0 14px;border-radius:10px;border:1px solid var(--line-2);background:var(--bg-2);font-size:15px;color:var(--text);font-family:var(--f-sans)}
-  .demo-input{min-width:260px}.demo-select{min-width:200px;cursor:pointer}
-  .demo-note{margin:0;color:var(--muted-2);font-size:13.5px}
-  .demo-status{text-align:center;font-weight:600;color:var(--muted);margin:16px 0 10px;font-size:14.5px}
-  .demo-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-bottom:16px}
-  .demo-card{background:var(--bg-2);border-radius:var(--r-lg);border:1px solid var(--line);padding:22px}
-  .demo-label{font-size:12px;font-weight:700;color:var(--muted-2);text-transform:uppercase;letter-spacing:.08em;margin-bottom:8px}
-  .demo-big-number{font-family:var(--f-display);font-size:44px;line-height:1;letter-spacing:-.05em;font-weight:700;margin-bottom:6px}
-  .demo-big-text{font-family:var(--f-display);font-size:30px;line-height:1.05;letter-spacing:-.04em;font-weight:700;margin-bottom:6px}
-  .demo-small{color:var(--muted-2);font-size:13.5px}
-  .critical{color:var(--critical)}.high{color:var(--high)}.medium{color:var(--medium)}.low{color:var(--low)}.protected{color:var(--ok)}.low-risk{color:var(--ok)}.medium-risk{color:var(--medium)}
-  .demo-results{display:grid;grid-template-columns:1.2fr .8fr;gap:16px}
-  .demo-results-left,.demo-results-right{display:flex;flex-direction:column;gap:14px}
-  .vuln-card h3,.report-title{margin:0 0 7px;font-size:19px;letter-spacing:-.02em;font-family:var(--f-display);font-weight:600}
-  .vuln-header{display:flex;justify-content:space-between;gap:14px;align-items:flex-start}
-  .vuln-meta{margin:0;color:var(--muted);font-size:14px}
-  .severity{display:inline-block;min-width:78px;text-align:center;padding:6px 11px;border-radius:999px;font-size:12px;font-weight:700;background:var(--surface-2);border:1px solid var(--line-2)}
-  .severity.critical{color:var(--critical);border-color:rgba(240,68,56,.35)}
-  .severity.high{color:var(--high);border-color:rgba(247,144,9,.35)}
-  .severity.medium{color:var(--medium);border-color:rgba(234,179,8,.35)}
-  .severity.low{color:var(--low);border-color:rgba(59,155,255,.35)}
-  .vuln-actions{margin-top:14px}
-  .report-row{display:flex;justify-content:space-between;gap:16px;padding:9px 0;border-bottom:1px solid var(--line);font-size:14.5px;color:var(--muted)}
-  .report-row:last-child{border-bottom:none}
-  .report-row strong{color:var(--text);font-weight:600}
-  .plan-features{margin:0;padding-left:18px;color:#cdd1d7;font-size:14.5px}
-  .plan-features li{margin:6px 0}
-  .final-btn{margin-top:16px;width:100%}
-  @media(max-width:1040px){.demo-grid,.demo-results{grid-template-columns:1fr}}
+    .small-desc {
+      max-width: 850px;
+      margin: 0 auto;
+      font-size: 19px;
+      color: #313135;
+      opacity: 0;
+      transform: translateY(18px);
+      animation: fadeUp 0.8s ease 0.34s forwards;
+    }
 
-  /* responsive */
-  @media(max-width:980px){
-    .split{grid-template-columns:1fr}
-    .pricing-grid{grid-template-columns:repeat(2,1fr)}
-    .g-3,.bignum-grid{grid-template-columns:1fr}
-  }
-  @media(max-width:620px){
-    .g-3,.g-2,.bignum-grid{grid-template-columns:1fr}
-    .pricing-grid{grid-template-columns:1fr}
-  }
-  @media(prefers-reduced-motion:reduce){
-    *{animation:none!important;transition:none!important;scroll-behavior:auto!important}
-    .reveal{opacity:1;transform:none}
-  }
+    .hero-actions {
+      display: flex;
+      justify-content: center;
+      gap: 14px;
+      flex-wrap: wrap;
+      margin-top: 30px;
+      opacity: 0;
+      transform: translateY(18px);
+      animation: fadeUp 0.8s ease 0.42s forwards;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      min-height: 52px;
+      padding: 0 22px;
+      border-radius: 999px;
+      text-decoration: none;
+      font-size: 15px;
+      font-weight: 700;
+      transition: 0.25s ease;
+      border: 1px solid transparent;
+    }
+
+    .btn-primary {
+      background: linear-gradient(180deg, #1482f0 0%, #0071e3 100%);
+      color: white;
+      box-shadow: 0 10px 24px rgba(0, 113, 227, 0.22);
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 16px 32px rgba(0, 113, 227, 0.25);
+    }
+
+    .btn-secondary {
+      background: rgba(255, 255, 255, 0.82);
+      color: var(--text);
+      border-color: rgba(0, 0, 0, 0.08);
+      box-shadow: var(--shadow-soft);
+    }
+
+    .btn-secondary:hover {
+      transform: translateY(-2px);
+      box-shadow: var(--shadow);
+    }
+
+    .section {
+      padding: 30px 0 40px;
+    }
+
+    .hero-panel {
+      margin-top: 34px;
+      padding: 18px;
+      border-radius: var(--radius-xl);
+      background: rgba(255, 255, 255, 0.5);
+      border: 1px solid rgba(255, 255, 255, 0.55);
+      box-shadow: var(--shadow-soft);
+      backdrop-filter: blur(18px);
+      opacity: 0;
+      transform: translateY(18px);
+      animation: fadeUp 0.8s ease 0.5s forwards;
+    }
+
+    .hero-panel-inner {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+    }
+
+    .stat {
+      background: rgba(255, 255, 255, 0.86);
+      border-radius: var(--radius-md);
+      padding: 24px;
+      border: 1px solid rgba(0, 0, 0, 0.05);
+      box-shadow: var(--shadow-soft);
+      text-align: left;
+    }
+
+    .stat-label {
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      margin-bottom: 8px;
+    }
+
+    .stat-value {
+      font-size: 28px;
+      font-weight: 800;
+      letter-spacing: -0.04em;
+      line-height: 1.1;
+      margin-bottom: 8px;
+    }
+
+    .stat p {
+      margin: 0;
+      font-size: 15px;
+      color: var(--muted);
+    }
+
+    .cards-3 {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 18px;
+    }
+
+    .card {
+      background: var(--card);
+      border: 1px solid rgba(0, 0, 0, 0.05);
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow-soft);
+      backdrop-filter: blur(18px);
+      padding: 30px;
+    }
+
+    .card h3 {
+      margin: 0 0 10px;
+      font-size: 26px;
+      line-height: 1.15;
+      letter-spacing: -0.03em;
+    }
+
+    .card p {
+      margin: 0;
+      font-size: 15px;
+      color: var(--muted);
+    }
+
+    .section-title {
+      margin: 0 0 18px;
+      text-align: center;
+      font-size: clamp(34px, 5vw, 58px);
+      line-height: 1.04;
+      letter-spacing: -0.05em;
+    }
+
+    .section-subtitle {
+      max-width: 820px;
+      margin: 0 auto 28px;
+      text-align: center;
+      color: var(--muted);
+      font-size: 18px;
+    }
+
+    .split {
+      display: grid;
+      grid-template-columns: 1.45fr 0.8fr;
+      gap: 22px;
+      align-items: start;
+    }
+
+    .content,
+    .side {
+      background: rgba(255, 255, 255, 0.84);
+      border: 1px solid rgba(0, 0, 0, 0.05);
+      border-radius: var(--radius-xl);
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(18px);
+    }
+
+    .content {
+      padding: 38px;
+    }
+
+    .content h2 {
+      margin: 0 0 18px;
+      font-size: clamp(34px, 4vw, 52px);
+      line-height: 1.04;
+      letter-spacing: -0.05em;
+    }
+
+    .content h3 {
+      margin: 28px 0 10px;
+      font-size: 25px;
+      line-height: 1.15;
+      letter-spacing: -0.03em;
+    }
+
+    .content p,
+    .content li {
+      font-size: 17px;
+      color: #2f2f33;
+    }
+
+    .content ul {
+      padding-left: 20px;
+      margin: 10px 0 0;
+    }
+
+    .sidebar {
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+    }
+
+    .side {
+      padding: 26px;
+    }
+
+    .side h3 {
+      margin: 0 0 14px;
+      font-size: 20px;
+      letter-spacing: -0.02em;
+    }
+
+    .side p {
+      margin: 8px 0;
+      color: var(--muted);
+      font-size: 15px;
+    }
+
+    .quote {
+      margin: 0;
+      font-size: 18px;
+      line-height: 1.75;
+      color: var(--text);
+      font-style: italic;
+    }
+
+    .pricing-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 18px;
+    }
+
+    .pricing-card {
+      background: rgba(255, 255, 255, 0.88);
+      border-radius: var(--radius-lg);
+      border: 1px solid rgba(0, 0, 0, 0.06);
+      box-shadow: var(--shadow-soft);
+      padding: 30px;
+      text-align: left;
+    }
+
+    .pricing-card.featured {
+      border: 1px solid rgba(0, 113, 227, 0.18);
+      box-shadow: 0 18px 50px rgba(0, 113, 227, 0.12);
+    }
+
+    .pricing-name {
+      font-size: 18px;
+      font-weight: 700;
+      margin-bottom: 8px;
+    }
+
+    .pricing-price {
+      font-size: 44px;
+      line-height: 1;
+      letter-spacing: -0.05em;
+      font-weight: 800;
+      margin-bottom: 12px;
+    }
+
+    .pricing-price span {
+      font-size: 16px;
+      font-weight: 600;
+      color: var(--muted);
+      letter-spacing: 0;
+    }
+
+    .pricing-card p {
+      margin: 0 0 16px;
+      color: var(--muted);
+      font-size: 15px;
+    }
+
+    .pricing-card ul {
+      margin: 0;
+      padding-left: 18px;
+      color: #2f2f33;
+      font-size: 15px;
+    }
+
+    .roadmap {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 14px;
+      overflow: hidden;
+      border-radius: 18px;
+    }
+
+    .roadmap th,
+    .roadmap td {
+      padding: 14px 10px;
+      text-align: left;
+      border-bottom: 1px solid #ececf1;
+      font-size: 15px;
+      vertical-align: top;
+    }
+
+    .roadmap th {
+      background: #fafafc;
+      color: var(--muted);
+      font-weight: 700;
+    }
+
+    .cta-band {
+      padding: 42px;
+      border-radius: var(--radius-xl);
+      background:
+        linear-gradient(135deg, rgba(0, 113, 227, 0.92), rgba(90, 200, 250, 0.95));
+      color: white;
+      box-shadow: 0 24px 60px rgba(0, 113, 227, 0.18);
+      text-align: center;
+    }
+
+    .cta-band h2 {
+      margin: 0 0 10px;
+      font-size: clamp(32px, 5vw, 54px);
+      line-height: 1.05;
+      letter-spacing: -0.05em;
+    }
+
+    .cta-band p {
+      margin: 0 auto 22px;
+      max-width: 760px;
+      font-size: 18px;
+      color: rgba(255, 255, 255, 0.9);
+    }
+
+    .cta-band .btn-secondary {
+      background: white;
+      color: var(--accent);
+      border: none;
+    }
+
+    .footer {
+      text-align: center;
+      padding: 38px 0 60px;
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    .reveal {
+      opacity: 0;
+      transform: translateY(24px);
+      transition: opacity 0.8s ease, transform 0.8s ease;
+    }
+
+    .reveal.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    @keyframes fadeUp {
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @media (max-width: 1040px) {
+      .hero-panel-inner,
+      .cards-3,
+      .pricing-grid,
+      .split {
+        grid-template-columns: 1fr;
+      }
+
+      .nav-inner {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+    }
+
+    @media (max-width: 640px) {
+      .content,
+      .side,
+      .card,
+      .pricing-card,
+      .stat {
+        padding: 22px;
+      }
+
+      .small-desc,
+      .section-subtitle,
+      .cta-band p {
+        font-size: 16px;
+      }
+
+      .content p,
+      .content li {
+        font-size: 16px;
+      }
+    }
   </style>
 </head>
 <body>
-
-  <!-- NAV -->
   <nav class="nav">
     <div class="nav-inner">
-      <a class="logo" href="#top" aria-label="Credibles Inc. home">
-        <svg class="logo-mark" viewBox="0 0 100 100" aria-hidden="true"><polygon points="0,100 100,0 100,100" fill="#C5A870"/></svg>
+      <div class="brand">
+        <img src="favicon.png" alt="Credibles logo" />
         <span>Credibles Inc.</span>
-      </a>
-      <div class="nav-links" id="navLinks">
+      </div>
+      <div class="nav-links">
         <a href="#about">About</a>
         <a href="#product">Product</a>
         <a href="#pricing">Pricing</a>
-        <a href="#roadmap">Roadmap</a>
         <a href="#founder">Founder</a>
-      </div>
-      <div class="nav-cta">
-        <a href="#waitlist" class="btn btn-primary btn-sm btn-nav">Join Waitlist</a>
-        <button class="nav-toggle" id="navToggle" aria-label="Toggle menu" aria-expanded="false">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="4" y1="7" x2="20" y2="7"/><line x1="4" y1="12" x2="20" y2="12"/><line x1="4" y1="17" x2="20" y2="17"/></svg>
-        </button>
+        <a href="#roadmap">Roadmap</a>
       </div>
     </div>
   </nav>
 
-  <!-- HERO -->
-  <header class="hero" id="top">
-    <div class="wrap">
-      <span class="badge"><span class="dot"></span> Coming Soon</span>
-      <div class="eyebrow">AI-Powered Cybersecurity</div>
-      <h1 class="hero-h1">Security, Rebuilt.</h1>
-      <p class="tagline">Your Shield. Powered By AI.</p>
-      <p class="small-desc">Credibles Inc. is building an autonomous cybersecurity platform that detects, analyzes, fixes, and continuously monitors vulnerabilities across websites, applications, and digital infrastructure.</p>
-      <div class="hero-actions" id="waitlist">
-        <form class="waitlist" action="https://formspree.io/f/YOUR_FORM_ID" method="POST" novalidate>
-          <input type="email" name="email" placeholder="you@company.com" required aria-label="Email address" autocomplete="email" />
-          <button type="submit" class="btn btn-primary">Join Waitlist</button>
-        </form>
-        <div class="form-success" role="status"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> You're on the waitlist. We'll be in touch.</div>
-        <p class="form-note">or email <a href="mailto:credibles.inc@gmail.com?subject=Join%20the%20Credibles%20Waitlist">credibles.inc@gmail.com</a> &nbsp;·&nbsp; <a href="#about">Explore Company Profile</a></p>
-      </div>
+  <header class="hero wrap">
+    <img src="favicon.png" alt="Credibles logo" class="hero-logo" />
+    <div class="eyebrow">AI-Powered Cybersecurity</div>
+    <h1>Security, Rebuilt.</h1>
+    <p class="tagline">Your Shield. Powered By AI.</p>
+    <p class="small-desc">
+      Credibles Inc. is building an autonomous cybersecurity platform that detects, analyzes, fixes, and continuously monitors vulnerabilities across websites, applications, and digital infrastructure.
+    </p>
+    <div class="hero-actions">
+      <a href="#about" class="btn btn-primary">Explore Company Profile</a>
+      <a href="mailto:credibles.inc@gmail.com?subject=Join%20the%20Credibles%20Waitlist" class="btn btn-secondary">Coming Soon • Join Waitlist</a>
     </div>
-  </header>
 
-  <main class="wrap">
-
-    <!-- STAT / PROMISE CARDS -->
-    <section class="section reveal" style="padding-top:clamp(40px,6vw,72px)">
-      <div class="grid g-3">
-        <div class="card">
+    <div class="hero-panel">
+      <div class="hero-panel-inner">
+        <div class="stat">
           <div class="stat-label">Pricing Range</div>
-          <div class="stat-value accent">$100 → $11,000</div>
+          <div class="stat-value">$49 → $1000</div>
           <p>Flexible plans designed for startups, growing teams, and enterprise clients.</p>
         </div>
-        <div class="card">
+        <div class="stat">
           <div class="stat-label">Core Promise</div>
           <div class="stat-value">Detect. Fix. Monitor.</div>
           <p>An AI-driven security layer built to reduce delays, costs, and human dependency.</p>
         </div>
-        <div class="card">
+        <div class="stat">
           <div class="stat-label">Long-Term Vision</div>
           <div class="stat-value">Global Access</div>
           <p>Enterprise-grade cybersecurity made accessible to every business on earth.</p>
         </div>
       </div>
-    </section>
+    </div>
+  </header>
 
-    <!-- THREE PROMISE CARDS -->
-    <section class="section reveal" style="padding-top:0">
-      <div class="grid g-3">
+  <main class="wrap">
+    <section class="section reveal">
+      <div class="cards-3">
         <div class="card">
-          <div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div>
           <h3>Autonomous Protection</h3>
           <p>Find vulnerabilities continuously and respond faster than traditional security workflows ever could.</p>
         </div>
         <div class="card">
-          <div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 7h5l2-3h4l2 3h5v12H3z"/><circle cx="12" cy="13" r="3"/></svg></div>
           <h3>Built For Modern Teams</h3>
           <p>From small startups to global enterprises, Credibles is designed to scale with digital infrastructure.</p>
         </div>
         <div class="card">
-          <div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 1 1-3-6.7"/><polyline points="21 3 21 9 15 9"/></svg></div>
           <h3>Always Learning</h3>
           <p>Connected to evolving threat intelligence so the platform improves as the threat landscape changes.</p>
         </div>
       </div>
     </section>
 
-    <!-- ABOUT -->
     <section class="section reveal" id="about">
-      <div class="sec-head center">
-        <h2 class="section-title">A New Standard For Cybersecurity.</h2>
-        <p class="section-subtitle">Credibles Inc. was built around one core belief: cybersecurity should not stay slow, expensive, and reactive.</p>
-      </div>
+      <h2 class="section-title">A New Standard For Cybersecurity.</h2>
+      <p class="section-subtitle">
+        Credibles Inc. was built around one core belief: cybersecurity should not stay slow, expensive, and reactive.
+      </p>
+
       <div class="split">
-        <article class="panel">
+        <article class="content">
           <h2>Credibles Inc. — Full Company Profile</h2>
 
           <h3>About The Company</h3>
-          <p>Credibles Inc. is a Lebanese cybersecurity artificial intelligence company founded on March 15, 2026 by Malik Hazem Assi, a 13 year old self taught developer and security researcher from Beirut, Lebanon. The company was born from a simple but powerful observation: cybersecurity is broken. Companies worldwide spend millions of dollars every year paying human bug bounty hunters to manually find vulnerabilities in their systems, a process that is slow, expensive, and inconsistent. Credibles Inc. exists to fix that permanently.</p>
-          <p class="ownership">Credibles Inc. will be owned by a bigger company called Agency.</p>
+          <p>
+            Credibles Inc. is a Lebanese cybersecurity artificial intelligence company founded on March 15, 2026 by Malik Hazem Assi, a 13 year old self taught developer and security researcher from Beirut, Lebanon. The company was born from a simple but powerful observation: cybersecurity is broken. Companies worldwide spend millions of dollars every year paying human bug bounty hunters to manually find vulnerabilities in their systems, a process that is slow, expensive, and inconsistent. Credibles Inc. exists to fix that permanently.
+          </p>
 
           <h3 id="product">What We Build</h3>
-          <p>Credibles Inc. is building an AI powered cybersecurity platform that automatically detects, analyzes, and fixes security vulnerabilities in websites, applications, and digital infrastructure without any human intervention. Think of it as a tireless, genius security researcher that works 24 hours a day, 7 days a week, 365 days a year, never takes a break, never misses a bug, and never sends an invoice for $50,000.</p>
+          <p>
+            Credibles Inc. is building an AI powered cybersecurity platform that automatically detects, analyzes, and fixes security vulnerabilities in websites, applications, and digital infrastructure without any human intervention. Think of it as a tireless, genius security researcher that works 24 hours a day, 7 days a week, 365 days a year, never takes a break, never misses a bug, and never sends an invoice for $50,000.
+          </p>
 
           <h3>The Problem We Solve</h3>
-          <p>Today, a company like Google, Microsoft, or Facebook pays individual security researchers anywhere from $500 to $250,000 per vulnerability found through platforms like HackerOne and Bugcrowd. Large enterprises spend between $50,000 and $500,000 per year on penetration testing alone. Small businesses and startups simply cannot afford this level of security, leaving them completely exposed to cyberattacks, data breaches, and financial devastation. Credibles Inc. changes everything. Our AI platform offers pricing plans ranging from $100 per month to $11,000 per month, making world class cybersecurity accessible to businesses of different sizes, needs, and budgets.</p>
+          <p>
+            Today, a company like Google, Microsoft, or Facebook pays individual security researchers anywhere from $500 to $250,000 per vulnerability found through platforms like HackerOne and Bugcrowd. Large enterprises spend between $50,000 and $500,000 per year on penetration testing alone. Small businesses and startups simply cannot afford this level of security, leaving them completely exposed to cyberattacks, data breaches, and financial devastation. Credibles Inc. changes everything. Our AI platform offers pricing plans ranging from $49 per month to $1000 per month, making world class cybersecurity accessible to businesses of different sizes, needs, and budgets.
+          </p>
+
+          <h3>What Our AI Does</h3>
+          <ul>
+            <li><strong>Vulnerability Detection:</strong> Continuously scans websites, APIs, and applications for known and unknown security vulnerabilities including SQL injection, cross site scripting, path traversal, broken access control, authentication bypass, and hundreds more attack vectors.</li>
+            <li><strong>Risk Assessment:</strong> Automatically classifies every vulnerability found by severity, critical, high, medium, or low, giving companies a clear picture of their security posture in real time.</li>
+            <li><strong>Automated Fixing:</strong> Unlike traditional scanners that just report problems, Credibles AI actually patches and fixes vulnerabilities automatically, pushing secure code updates directly to the company's codebase.</li>
+            <li><strong>Continuous Monitoring:</strong> Every time a company pushes new code or updates their systems, Credibles AI immediately rescans and ensures no new vulnerabilities were introduced.</li>
+            <li><strong>Threat Intelligence:</strong> Connected to a global database of emerging threats, zero day vulnerabilities, and attack patterns, always learning, always updating, always one step ahead of hackers.</li>
+            <li><strong>Compliance Reporting:</strong> Automatically generates detailed security reports for regulatory compliance including GDPR, ISO 27001, SOC 2, and more.</li>
+          </ul>
+
+          <h3>Market Opportunity</h3>
+          <p>
+            The global cybersecurity market is valued at $200 billion in 2026 and projected to reach $500 billion by 2030. Every single company with a website or digital product is a potential Credibles Inc. customer. There are over 400 million businesses worldwide. Capturing even a small share of that market creates major recurring revenue potential.
+          </p>
+
+          <h3>Competitive Advantage</h3>
+          <p>
+            Similar companies like Snyk, Veracode, and CrowdStrike exist, but none offer the complete combination of automated detection and automated fixing at an accessible price point for small and medium businesses. Credibles Inc. fills that gap.
+          </p>
         </article>
 
-        <aside class="sidecol">
+        <aside class="sidebar">
           <div class="side">
             <h3>Quick Overview</h3>
             <p><strong>Company:</strong> Credibles Inc.</p>
             <p><strong>Industry:</strong> AI-powered cybersecurity</p>
             <p><strong>Founded:</strong> March 15, 2026</p>
             <p><strong>Location:</strong> Beirut, Lebanon</p>
-            <p><strong>Pricing:</strong> $100/month to $11,000/month</p>
+            <p><strong>Pricing:</strong> $49/month to $1000/month</p>
             <p><strong>Contact:</strong> credibles.inc@gmail.com</p>
             <p><strong>Slogan:</strong> Your Shield. Powered By AI.</p>
           </div>
+
+          <div class="side" id="founder">
+            <h3>Founder</h3>
+            <p><strong>Malik Hazem Assi — Founder & CEO</strong></p>
+            <p>Age 13 at founding, Beirut, Lebanon.</p>
+            <p>Self taught cybersecurity researcher.</p>
+            <p>Studying: TryHackMe, PortSwigger Web Security Academy, Harvard CS50x, Harvard CS50 AI.</p>
+            <p>Expected first product launch: 2029.</p>
+            <p>Vision: Make enterprise cybersecurity accessible to every business on earth.</p>
+          </div>
+
           <div class="side">
-            <h3>Owned By</h3>
-            <p>Credibles Inc. — part of Agency.</p>
-            <p class="quote-side">A new standard for cybersecurity, backed by the scale of a larger company.</p>
+            <h3>Founder Statement</h3>
+            <p class="quote">
+              “I started learning cybersecurity at 13 not just to make money, but because I saw a world where small businesses get destroyed by cyberattacks they could never afford to prevent. Credibles Inc. changes that.”
+            </p>
           </div>
         </aside>
       </div>
     </section>
 
-    <!-- THE PROBLEM (big numbers) -->
-    <section class="section reveal">
-      <div class="sec-head center">
-        <h2 class="section-title">The Problem We Solve.</h2>
-      </div>
-      <div class="bignum-grid">
-        <div class="bignum"><div class="n">$500 → $250,000</div><div class="l">Paid per vulnerability to human researchers on platforms like HackerOne and Bugcrowd.</div></div>
-        <div class="bignum"><div class="n">$50,000 → $500,000</div><div class="l">Spent by large enterprises per year on penetration testing alone.</div></div>
-        <div class="bignum"><div class="n accent">$100 → $11,000</div><div class="l">Credibles plans per month, making world class security accessible to every budget.</div></div>
-      </div>
-      <p class="prose text">Today, a company like Google, Microsoft, or Facebook pays individual security researchers anywhere from $500 to $250,000 per vulnerability found through platforms like HackerOne and Bugcrowd. Large enterprises spend between $50,000 and $500,000 per year on penetration testing alone. Small businesses and startups simply cannot afford this level of security, leaving them completely exposed to cyberattacks, data breaches, and financial devastation. Credibles Inc. changes everything. Our AI platform offers pricing plans ranging from $100 per month to $11,000 per month, making world class cybersecurity accessible to businesses of different sizes, needs, and budgets.</p>
-    </section>
+    <section class="section reveal" id="pricing">
+      <h2 class="section-title">Flexible Pricing, Serious Security.</h2>
+      <p class="section-subtitle">
+        Built to make high-level protection available to startups, scaling companies, and enterprise teams.
+      </p>
 
-    <!-- WHAT OUR AI DOES -->
-    <section class="section reveal">
-      <div class="sec-head center">
-        <h2 class="section-title">What Our AI Does</h2>
-      </div>
-      <div class="grid g-3">
-        <div class="card feat">
-          <div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg></div>
-          <p><span class="k">Vulnerability Detection:</span> Continuously scans websites, APIs, and applications for known and unknown security vulnerabilities including SQL injection, cross site scripting, path traversal, broken access control, authentication bypass, and hundreds more attack vectors.</p>
+      <div class="pricing-grid">
+        <div class="pricing-card">
+          <div class="pricing-name">Starter</div>
+          <div class="pricing-price">$49 <span>/ month</span></div>
+          <p>For early-stage websites and small digital businesses.</p>
+          <ul>
+            <li>Basic vulnerability scanning</li>
+            <li>Severity classification</li>
+            <li>Core security reporting</li>
+          </ul>
         </div>
-        <div class="card feat">
-          <div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3a9 9 0 1 0 9 9"/><path d="M12 12l5-5"/><path d="M12 12V7"/></svg></div>
-          <p><span class="k">Risk Assessment:</span> Automatically classifies every vulnerability found by severity, critical, high, medium, or low, giving companies a clear picture of their security posture in real time.</p>
+
+        <div class="pricing-card featured">
+          <div class="pricing-name">Growth</div>
+          <div class="pricing-price">$249 <span>/ month</span></div>
+          <p>For teams that need deeper protection and continuous monitoring.</p>
+          <ul>
+            <li>Continuous monitoring</li>
+            <li>Expanded attack vector coverage</li>
+            <li>Advanced threat intelligence</li>
+          </ul>
         </div>
-        <div class="card feat">
-          <div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14.7 6.3a4 4 0 0 0-5.4 5.4L3 18l3 3 6.3-6.3a4 4 0 0 0 5.4-5.4l-2.6 2.6-2-2z"/></svg></div>
-          <p><span class="k">Automated Fixing:</span> Unlike traditional scanners that just report problems, Credibles AI actually patches and fixes vulnerabilities automatically, pushing secure code updates directly to the company's codebase.</p>
-        </div>
-        <div class="card feat">
-          <div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7-11-7-11-7z"/><circle cx="12" cy="12" r="3"/></svg></div>
-          <p><span class="k">Continuous Monitoring:</span> Every time a company pushes new code or updates their systems, Credibles AI immediately rescans and ensures no new vulnerabilities were introduced.</p>
-        </div>
-        <div class="card feat">
-          <div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M3 12h18"/><path d="M12 3a15 15 0 0 1 0 18a15 15 0 0 1 0-18z"/></svg></div>
-          <p><span class="k">Threat Intelligence:</span> Connected to a global database of emerging threats, zero day vulnerabilities, and attack patterns, always learning, always updating, always one step ahead of hackers.</p>
-        </div>
-        <div class="card feat">
-          <div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14 3H6a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"/><polyline points="14 3 14 9 20 9"/><polyline points="9 15 11 17 15 13"/></svg></div>
-          <p><span class="k">Compliance Reporting:</span> Automatically generates detailed security reports for regulatory compliance including GDPR, ISO 27001, SOC 2, and more.</p>
+
+        <div class="pricing-card">
+          <div class="pricing-name">Enterprise</div>
+          <div class="pricing-price">$1000 <span>/ month</span></div>
+          <p>For larger organizations with complex security needs.</p>
+          <ul>
+            <li>Automated fixing workflows</li>
+            <li>Compliance reporting</li>
+            <li>Priority support and custom deployments</li>
+          </ul>
         </div>
       </div>
     </section>
 
-    <!-- INTERACTIVE DEMO -->
-    <section class="section reveal" id="demo">
-      <div class="sec-head center">
-        <h2 class="section-title">Interactive Demo</h2>
-        <p class="section-subtitle">Experience how Credibles AI scans, classifies, fixes, and reports vulnerabilities in real time.</p>
-      </div>
-
-      <div class="demo-shell">
-        <div class="demo-top">
-          <div class="demo-input-wrap">
-            <input id="urlInput" class="demo-input" type="text" placeholder="Enter your website URL..." aria-label="Website URL" />
-            <select id="planSelect" class="demo-select" aria-label="Select plan">
-              <option value="starter">Starter • $100/mo</option>
-              <option value="growth">Growth • $450/mo</option>
-              <option value="pro">Pro • $1,500/mo</option>
-              <option value="enterprise">Enterprise • $11,000/mo</option>
-            </select>
-            <button onclick="startScan()" class="btn btn-primary">Run Demo Scan</button>
-          </div>
-          <p class="demo-note">Concept preview only. This interactive demo shows how the Credibles platform experience could work.</p>
-        </div>
-
-        <div id="scanStatus" class="demo-status">Ready to scan.</div>
-
-        <div id="dashboard" class="demo-dashboard" style="display:none;">
-          <div class="demo-grid">
-            <div class="demo-card score-card">
-              <div class="demo-label">Security Score</div>
-              <div id="securityScore" class="demo-big-number">42</div>
-              <div class="demo-small">before automated fixes</div>
-            </div>
-            <div class="demo-card">
-              <div class="demo-label">Risk Level</div>
-              <div id="riskLevel" class="demo-big-text critical">Critical</div>
-              <div class="demo-small">based on detected issues</div>
-            </div>
-            <div class="demo-card">
-              <div class="demo-label">Active Vulnerabilities</div>
-              <div id="vulnCount" class="demo-big-number">6</div>
-              <div class="demo-small">detected across target system</div>
-            </div>
-          </div>
-
-          <div class="demo-results">
-            <div class="demo-results-left">
-              <div class="demo-card vuln-card">
-                <div class="vuln-header"><div><h3>SQL Injection</h3><p class="vuln-meta">Login endpoint vulnerable to database manipulation.</p></div><span class="severity critical">Critical</span></div>
-                <div class="vuln-actions"><button onclick="fixVuln(this,'sql')" class="btn btn-ghost btn-sm">Auto Fix</button></div>
-              </div>
-              <div class="demo-card vuln-card">
-                <div class="vuln-header"><div><h3>Cross-Site Scripting</h3><p class="vuln-meta">Unsanitized user input detected in public form.</p></div><span class="severity high">High</span></div>
-                <div class="vuln-actions"><button onclick="fixVuln(this,'xss')" class="btn btn-ghost btn-sm">Auto Fix</button></div>
-              </div>
-              <div class="demo-card vuln-card">
-                <div class="vuln-header"><div><h3>Broken Access Control</h3><p class="vuln-meta">Unauthorized access path found for admin resource.</p></div><span class="severity high">High</span></div>
-                <div class="vuln-actions"><button onclick="fixVuln(this,'bac')" class="btn btn-ghost btn-sm">Auto Fix</button></div>
-              </div>
-              <div class="demo-card vuln-card plan-growth plan-pro plan-enterprise">
-                <div class="vuln-header"><div><h3>Path Traversal</h3><p class="vuln-meta">Improper file path validation may expose sensitive resources.</p></div><span class="severity medium">Medium</span></div>
-                <div class="vuln-actions"><button onclick="fixVuln(this,'pt')" class="btn btn-ghost btn-sm">Auto Fix</button></div>
-              </div>
-              <div class="demo-card vuln-card plan-pro plan-enterprise">
-                <div class="vuln-header"><div><h3>Threat Intelligence Alert</h3><p class="vuln-meta">Emerging exploit pattern matched against external threat database.</p></div><span class="severity medium">Medium</span></div>
-                <div class="vuln-actions"><button onclick="fixVuln(this,'ti')" class="btn btn-ghost btn-sm">Auto Fix</button></div>
-              </div>
-              <div class="demo-card vuln-card plan-enterprise">
-                <div class="vuln-header"><div><h3>Compliance Gap</h3><p class="vuln-meta">Missing security control affecting audit readiness and reporting.</p></div><span class="severity low">Low</span></div>
-                <div class="vuln-actions"><button onclick="fixVuln(this,'cg')" class="btn btn-ghost btn-sm">Auto Fix</button></div>
-              </div>
-            </div>
-
-            <div class="demo-results-right">
-              <div class="demo-card">
-                <h3 class="report-title">Live Report</h3>
-                <div class="report-row"><span>Plan</span><strong id="reportPlan">Starter</strong></div>
-                <div class="report-row"><span>Target</span><strong id="reportTarget">example.com</strong></div>
-                <div class="report-row"><span>Detection</span><strong>Complete</strong></div>
-                <div class="report-row"><span>Risk Score</span><strong id="reportRisk">Critical</strong></div>
-                <div class="report-row"><span>Resolved</span><strong id="resolvedCount">0 / 3</strong></div>
-                <div class="report-row"><span>Compliance</span><strong id="complianceText">Basic security summary</strong></div>
-              </div>
-              <div class="demo-card">
-                <h3 class="report-title">Included In Your Plan</h3>
-                <ul id="planFeatures" class="plan-features">
-                  <li>Basic vulnerability detection</li>
-                  <li>Severity classification</li>
-                  <li>Core security summary</li>
-                </ul>
-              </div>
-              <div class="demo-card final-report" id="finalReportBox" style="display:none;">
-                <h3 class="report-title">Post-Fix Summary</h3>
-                <div class="report-row"><span>Updated Score</span><strong id="finalScore">91</strong></div>
-                <div class="report-row"><span>Updated Level</span><strong id="finalLevel">Low Risk</strong></div>
-                <div class="report-row"><span>Status</span><strong>System stabilized</strong></div>
-                <a href="#waitlist" class="btn btn-primary final-btn">Join Waitlist</a>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- MARKET + COMPETITIVE -->
-    <section class="section reveal">
-      <div class="sec-head center">
-        <h2 class="section-title">Market Opportunity</h2>
-      </div>
-      <div class="bignum-grid">
-        <div class="bignum"><div class="n accent">$200B</div><div class="l">Global cybersecurity market valued in 2026.</div></div>
-        <div class="bignum"><div class="n accent">$500B</div><div class="l">Projected market size by 2030.</div></div>
-        <div class="bignum"><div class="n accent">400M+</div><div class="l">Businesses worldwide, every one a potential customer.</div></div>
-      </div>
-      <p class="prose text" style="margin-bottom:40px">The global cybersecurity market is valued at $200 billion in 2026 and projected to reach $500 billion by 2030. Every single company with a website or digital product is a potential Credibles Inc. customer. There are over 400 million businesses worldwide. Capturing even a small share of that market creates major recurring revenue potential.</p>
-
-      <div class="sec-head center" style="margin-bottom:22px">
-        <h2 class="section-title" style="font-size:clamp(26px,3.4vw,40px)">Competitive Advantage</h2>
-      </div>
-      <div class="cmp-wrap">
-        <table class="cmp">
+    <section class="section reveal" id="roadmap">
+      <div class="content">
+        <h2>Company Roadmap</h2>
+        <table class="roadmap">
           <thead>
             <tr>
-              <th>Capability</th>
-              <th class="us">Credibles</th>
-              <th>Snyk</th>
-              <th>Veracode</th>
-              <th>CrowdStrike</th>
+              <th>Year</th>
+              <th>Milestone</th>
             </tr>
           </thead>
           <tbody>
-            <tr><td class="feat-name">Automated detection</td><td class="yes">✓</td><td class="yes">✓</td><td class="yes">✓</td><td class="yes">✓</td></tr>
-            <tr><td class="feat-name">Automated fixing</td><td class="yes">✓</td><td class="no">—</td><td class="no">—</td><td class="no">—</td></tr>
-            <tr><td class="feat-name">Accessible pricing for small &amp; medium businesses</td><td class="yes">✓</td><td class="no">—</td><td class="no">—</td><td class="no">—</td></tr>
-            <tr><td class="feat-name">Complete detection + fixing in one platform</td><td class="yes">✓</td><td class="no">—</td><td class="no">—</td><td class="no">—</td></tr>
+            <tr><td>2026</td><td>Founded — learning cybersecurity and Python</td></tr>
+            <tr><td>2027</td><td>First bug bounty earnings on HackerOne</td></tr>
+            <tr><td>2028</td><td>First prototype of Credibles AI built</td></tr>
+            <tr><td>2029</td><td>Beta launch — first paying customers</td></tr>
+            <tr><td>2030</td><td>Official public launch</td></tr>
+            <tr><td>2032</td><td>10,000+ customers worldwide</td></tr>
+            <tr><td>2035</td><td>Unicorn status — $1 billion+ valuation</td></tr>
           </tbody>
         </table>
       </div>
-      <p class="cmp-cap">Similar companies like Snyk, Veracode, and CrowdStrike exist, but none offer the complete combination of automated detection and automated fixing at an accessible price point for small and medium businesses. Credibles Inc. fills that gap.</p>
     </section>
 
-    <!-- PRICING -->
-    <section class="section reveal" id="pricing">
-      <div class="sec-head center">
-        <h2 class="section-title">Flexible Pricing, Serious Security.</h2>
-        <p class="section-subtitle">Built to make high-level protection available to startups, scaling companies, and enterprise teams.</p>
-      </div>
-      <div class="pricing-grid">
-        <div class="price">
-          <div class="price-name">Starter</div>
-          <div class="price-amt">$100 <span>/ month</span></div>
-          <p class="price-desc">For early-stage websites and small digital businesses.</p>
-          <ul>
-            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>Basic vulnerability scanning</li>
-            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>Severity classification</li>
-            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>Core security reporting</li>
-          </ul>
-          <a href="#waitlist" class="btn btn-ghost">Join Waitlist</a>
-        </div>
-
-        <div class="price featured">
-          <span class="price-tag">Most popular</span>
-          <div class="price-name">Growth</div>
-          <div class="price-amt">$450 <span>/ month</span></div>
-          <p class="price-desc">For teams that need deeper protection and continuous monitoring.</p>
-          <p class="inc">Everything in Starter, plus:</p>
-          <ul>
-            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>Continuous monitoring</li>
-            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>Expanded attack vector coverage</li>
-            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>Advanced threat intelligence</li>
-          </ul>
-          <a href="#waitlist" class="btn btn-primary">Join Waitlist</a>
-        </div>
-
-        <div class="price">
-          <div class="price-name">Pro</div>
-          <div class="price-amt">$1,500 <span>/ month</span></div>
-          <p class="price-desc">For scaling companies that need automated fixing and compliance reporting.</p>
-          <p class="inc">Everything in Growth, plus:</p>
-          <ul>
-            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>Automated fixing workflows</li>
-            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>Compliance reporting</li>
-          </ul>
-          <a href="#waitlist" class="btn btn-ghost">Join Waitlist</a>
-        </div>
-
-        <div class="price">
-          <div class="price-name">Enterprise</div>
-          <div class="price-amt">$11,000 <span>/ month</span></div>
-          <p class="price-desc">For larger organizations with complex security needs.</p>
-          <p class="inc">Everything in Pro, plus:</p>
-          <ul>
-            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>Priority support and custom deployments</li>
-          </ul>
-          <a href="#waitlist" class="btn btn-ghost">Join Waitlist</a>
-        </div>
-      </div>
-    </section>
-
-    <!-- ROADMAP -->
-    <section class="section reveal" id="roadmap">
-      <div class="sec-head center">
-        <h2 class="section-title">Company Roadmap</h2>
-      </div>
-      <div class="timeline">
-        <div class="tl-item"><div class="tl-year">2026</div><div class="tl-text">Founded — learning cybersecurity and Python</div></div>
-        <div class="tl-item"><div class="tl-year">2027</div><div class="tl-text">First bug bounty earnings on HackerOne</div></div>
-        <div class="tl-item"><div class="tl-year">2028</div><div class="tl-text">First prototype of Credibles AI built</div></div>
-        <div class="tl-item"><div class="tl-year">2029</div><div class="tl-text">Beta launch — first paying customers</div></div>
-        <div class="tl-item"><div class="tl-year">2030</div><div class="tl-text">Official public launch</div></div>
-        <div class="tl-item"><div class="tl-year">2032</div><div class="tl-text">10,000+ customers worldwide</div></div>
-        <div class="tl-item"><div class="tl-year">2035</div><div class="tl-text">Unicorn status — $1 billion+ valuation</div></div>
-      </div>
-    </section>
-
-    <!-- FOUNDER -->
-    <section class="section reveal" id="founder">
-      <div class="sec-head center">
-        <h2 class="section-title">Founder</h2>
-      </div>
-      <div class="founder-card">
-        <div>
-          <blockquote class="founder-quote"><span class="mark">“</span>I started learning cybersecurity at 13 not just to make money, but because I saw a world where small businesses get destroyed by cyberattacks they could never afford to prevent. Credibles Inc. changes that.”</blockquote>
-          <p class="founder-by"><strong>Malik Hazem Assi — Founder &amp; CEO</strong></p>
-        </div>
-        <div class="founder-facts">
-          <p>Age 13 at founding, Beirut, Lebanon.</p>
-          <p>Self taught cybersecurity researcher.</p>
-          <p><strong>Studying:</strong> TryHackMe, PortSwigger Web Security Academy, Harvard CS50x, Harvard CS50 AI.</p>
-          <p><strong>Expected first product launch:</strong> 2029.</p>
-          <p><strong>Vision:</strong> Make enterprise cybersecurity accessible to every business on earth.</p>
-        </div>
-      </div>
-    </section>
-
-    <!-- FINAL CTA -->
-    <section class="section reveal" style="padding-bottom:0">
+    <section class="section reveal">
       <div class="cta-band">
         <h2>Coming Soon.</h2>
-        <p>Credibles Inc. is building the future of autonomous cybersecurity. Join the waitlist to follow the journey and get early access.</p>
-        <form class="waitlist" action="https://formspree.io/f/YOUR_FORM_ID" method="POST" novalidate>
-          <input type="email" name="email" placeholder="you@company.com" required aria-label="Email address" autocomplete="email" />
-          <button type="submit" class="btn btn-primary">Join Waitlist</button>
-        </form>
-        <div class="form-success" role="status"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> You're on the waitlist. We'll be in touch.</div>
-        <p class="form-note" style="margin-top:12px">or email <a href="mailto:credibles.inc@gmail.com?subject=Join%20the%20Credibles%20Waitlist">credibles.inc@gmail.com</a></p>
+        <p>
+          Credibles Inc. is building the future of autonomous cybersecurity. Join the waitlist to follow the journey and get early access.
+        </p>
+        <a href="mailto:credibles.inc@gmail.com?subject=Join%20the%20Credibles%20Waitlist" class="btn btn-secondary">Join Waitlist</a>
       </div>
     </section>
+ <section class="section reveal" id="demo">
+  <h2 class="section-title">Interactive Demo</h2>
+  <p class="section-subtitle">
+    Experience how Credibles AI scans, classifies, fixes, and reports vulnerabilities in real time.
+  </p>
 
+  <div class="demo-shell">
+    <div class="demo-top">
+      <div class="demo-input-wrap">
+        <input id="urlInput" class="demo-input" type="text" placeholder="Enter your website URL..." />
+        <select id="planSelect" class="demo-select">
+          <option value="starter">Starter • $49/mo</option>
+          <option value="growth">Growth • $249/mo</option>
+          <option value="enterprise">Enterprise • $1000/mo</option>
+        </select>
+        <button onclick="startScan()" class="btn btn-primary">Run Demo Scan</button>
+      </div>
+      <p class="demo-note">
+        Concept preview only. This interactive demo shows how the Credibles platform experience could work.
+      </p>
+    </div>
+
+    <div id="scanStatus" class="demo-status">Ready to scan.</div>
+
+    <div id="dashboard" class="demo-dashboard" style="display:none;">
+      <div class="demo-grid">
+        <div class="demo-card score-card">
+          <div class="demo-label">Security Score</div>
+          <div id="securityScore" class="demo-big-number">42</div>
+          <div class="demo-small">before automated fixes</div>
+        </div>
+
+        <div class="demo-card">
+          <div class="demo-label">Risk Level</div>
+          <div id="riskLevel" class="demo-big-text critical">Critical</div>
+          <div class="demo-small">based on detected issues</div>
+        </div>
+
+        <div class="demo-card">
+          <div class="demo-label">Active Vulnerabilities</div>
+          <div id="vulnCount" class="demo-big-number">6</div>
+          <div class="demo-small">detected across target system</div>
+        </div>
+      </div>
+
+      <div class="demo-results">
+        <div class="demo-results-left">
+          <div class="demo-card vuln-card">
+            <div class="vuln-header">
+              <div>
+                <h3>SQL Injection</h3>
+                <p class="vuln-meta">Login endpoint vulnerable to database manipulation.</p>
+              </div>
+              <span class="severity critical">Critical</span>
+            </div>
+            <div class="vuln-actions">
+              <button onclick="fixVuln(this, 'sql')" class="btn btn-secondary">Auto Fix</button>
+            </div>
+          </div>
+
+          <div class="demo-card vuln-card">
+            <div class="vuln-header">
+              <div>
+                <h3>Cross-Site Scripting</h3>
+                <p class="vuln-meta">Unsanitized user input detected in public form.</p>
+              </div>
+              <span class="severity high">High</span>
+            </div>
+            <div class="vuln-actions">
+              <button onclick="fixVuln(this, 'xss')" class="btn btn-secondary">Auto Fix</button>
+            </div>
+          </div>
+
+          <div class="demo-card vuln-card">
+            <div class="vuln-header">
+              <div>
+                <h3>Broken Access Control</h3>
+                <p class="vuln-meta">Unauthorized access path found for admin resource.</p>
+              </div>
+              <span class="severity high">High</span>
+            </div>
+            <div class="vuln-actions">
+              <button onclick="fixVuln(this, 'bac')" class="btn btn-secondary">Auto Fix</button>
+            </div>
+          </div>
+
+          <div class="demo-card vuln-card plan-growth plan-enterprise">
+            <div class="vuln-header">
+              <div>
+                <h3>Path Traversal</h3>
+                <p class="vuln-meta">Improper file path validation may expose sensitive resources.</p>
+              </div>
+              <span class="severity medium">Medium</span>
+            </div>
+            <div class="vuln-actions">
+              <button onclick="fixVuln(this, 'pt')" class="btn btn-secondary">Auto Fix</button>
+            </div>
+          </div>
+
+          <div class="demo-card vuln-card plan-enterprise">
+            <div class="vuln-header">
+              <div>
+                <h3>Threat Intelligence Alert</h3>
+                <p class="vuln-meta">Emerging exploit pattern matched against external threat database.</p>
+              </div>
+              <span class="severity medium">Medium</span>
+            </div>
+            <div class="vuln-actions">
+              <button onclick="fixVuln(this, 'ti')" class="btn btn-secondary">Auto Fix</button>
+            </div>
+          </div>
+
+          <div class="demo-card vuln-card plan-enterprise">
+            <div class="vuln-header">
+              <div>
+                <h3>Compliance Gap</h3>
+                <p class="vuln-meta">Missing security control affecting audit readiness and reporting.</p>
+              </div>
+              <span class="severity low">Low</span>
+            </div>
+            <div class="vuln-actions">
+              <button onclick="fixVuln(this, 'cg')" class="btn btn-secondary">Auto Fix</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="demo-results-right">
+          <div class="demo-card">
+            <h3 class="report-title">Live Report</h3>
+            <div class="report-row"><span>Plan</span><strong id="reportPlan">Starter</strong></div>
+            <div class="report-row"><span>Target</span><strong id="reportTarget">example.com</strong></div>
+            <div class="report-row"><span>Detection</span><strong>Complete</strong></div>
+            <div class="report-row"><span>Risk Score</span><strong id="reportRisk">Critical</strong></div>
+            <div class="report-row"><span>Resolved</span><strong id="resolvedCount">0 / 3</strong></div>
+            <div class="report-row"><span>Compliance</span><strong id="complianceText">Basic security summary</strong></div>
+          </div>
+
+          <div class="demo-card">
+            <h3 class="report-title">Included In Your Plan</h3>
+            <ul id="planFeatures" class="plan-features">
+              <li>Basic vulnerability detection</li>
+              <li>Severity classification</li>
+              <li>Core security summary</li>
+            </ul>
+          </div>
+
+          <div class="demo-card final-report" id="finalReportBox" style="display:none;">
+            <h3 class="report-title">Post-Fix Summary</h3>
+            <div class="report-row"><span>Updated Score</span><strong id="finalScore">91</strong></div>
+            <div class="report-row"><span>Updated Level</span><strong id="finalLevel">Low Risk</strong></div>
+            <div class="report-row"><span>Status</span><strong>System stabilized</strong></div>
+            <a href="mailto:credibles.inc@gmail.com?subject=Join%20the%20Credibles%20Waitlist" class="btn btn-primary final-btn">Join Waitlist</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
   </main>
 
-  <!-- FOOTER -->
   <footer class="footer">
-    <div class="wrap">
-      <div class="footer-top">
-        <div>
-          <a class="logo" href="#top" aria-label="Credibles Inc. home">
-            <svg class="logo-mark" viewBox="0 0 100 100" aria-hidden="true"><polygon points="0,100 100,0 100,100" fill="#C5A870"/></svg>
-            <span>Credibles Inc.</span>
-          </a>
-          <p class="part">Credibles Inc. — part of Agency</p>
-          <p class="contact">Contact: <a href="mailto:credibles.inc@gmail.com">credibles.inc@gmail.com</a></p>
-        </div>
-        <nav class="footer-links" aria-label="Footer">
-          <a href="#about">About</a>
-          <a href="#product">Product</a>
-          <a href="#pricing">Pricing</a>
-          <a href="#roadmap">Roadmap</a>
-          <a href="#founder">Founder</a>
-        </nav>
-      </div>
-      <div class="footer-bottom">© 2026 Credibles Inc. • AI-powered cybersecurity platform</div>
-    </div>
+    © 2026 Credibles Inc. • AI-powered cybersecurity platform
   </footer>
 
   <script>
-    /* reveal on scroll */
-    var io = new IntersectionObserver(function(entries){
-      entries.forEach(function(e){ if(e.isIntersecting){ e.target.classList.add("visible"); io.unobserve(e.target);} });
-    }, { threshold: 0.12 });
-    document.querySelectorAll(".reveal").forEach(function(el){ io.observe(el); });
-
-    /* mobile nav */
-    var navToggle = document.getElementById("navToggle");
-    var navLinks = document.getElementById("navLinks");
-    if(navToggle){
-      navToggle.addEventListener("click", function(){
-        var open = navLinks.classList.toggle("open");
-        navToggle.setAttribute("aria-expanded", open ? "true":"false");
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) entry.target.classList.add("visible");
       });
-      navLinks.querySelectorAll("a").forEach(function(a){ a.addEventListener("click",function(){ navLinks.classList.remove("open"); navToggle.setAttribute("aria-expanded","false"); }); });
+    }, { threshold: 0.14 });
+
+    document.querySelectorAll(".reveal").forEach((el) => observer.observe(el));
+  </script>
+<script>
+  let activePlan = "starter";
+  let totalFixable = 3;
+  let fixedCount = 0;
+
+  const planData = {
+    starter: {
+      label: "Starter • $49/mo",
+      risk: "Critical",
+      score: 42,
+      total: 3,
+      compliance: "Basic security summary",
+      features: [
+        "Basic vulnerability detection",
+        "Severity classification",
+        "Core security summary"
+      ],
+      visibleClasses: ["starter", "growth", "enterprise"]
+    },
+    growth: {
+      label: "Growth • $249/mo",
+      risk: "High",
+      score: 58,
+      total: 4,
+      compliance: "Advanced monitoring summary",
+      features: [
+        "Continuous monitoring",
+        "Expanded attack vector coverage",
+        "Advanced threat detection",
+        "Enhanced reporting"
+      ],
+      visibleClasses: ["growth", "enterprise"]
+    },
+    enterprise: {
+      label: "Enterprise • $1000/mo",
+      risk: "High",
+      score: 64,
+      total: 6,
+      compliance: "Compliance reporting: GDPR, ISO 27001, SOC 2",
+      features: [
+        "Automated vulnerability fixing",
+        "Threat intelligence integration",
+        "Compliance reporting",
+        "Continuous monitoring",
+        "Priority support",
+        "Advanced enterprise security workflows"
+      ],
+      visibleClasses: ["enterprise"]
+    }
+  };
+
+  function startScan() {
+    const target = document.getElementById("urlInput").value.trim() || "example.com";
+    activePlan = document.getElementById("planSelect").value;
+    const config = planData[activePlan];
+
+    fixedCount = 0;
+    totalFixable = config.total;
+
+    document.getElementById("scanStatus").innerText = "Scanning target...";
+    document.getElementById("dashboard").style.display = "none";
+    document.getElementById("finalReportBox").style.display = "none";
+
+    resetButtons();
+    updatePlanVisibility();
+
+    setTimeout(() => {
+      document.getElementById("scanStatus").innerText = "Scan complete. Vulnerabilities detected.";
+      document.getElementById("dashboard").style.display = "block";
+
+      document.getElementById("securityScore").innerText = config.score;
+      document.getElementById("riskLevel").innerText = config.risk;
+      document.getElementById("riskLevel").className = "demo-big-text " + config.risk.toLowerCase().replace(" ", "-");
+      document.getElementById("vulnCount").innerText = config.total;
+
+      document.getElementById("reportPlan").innerText = config.label;
+      document.getElementById("reportTarget").innerText = target;
+      document.getElementById("reportRisk").innerText = config.risk;
+      document.getElementById("resolvedCount").innerText = "0 / " + config.total;
+      document.getElementById("complianceText").innerText = config.compliance;
+
+      const featureList = document.getElementById("planFeatures");
+      featureList.innerHTML = "";
+      config.features.forEach(feature => {
+        const li = document.createElement("li");
+        li.innerText = feature;
+        featureList.appendChild(li);
+      });
+    }, 1700);
+  }
+
+  function updatePlanVisibility() {
+    const allPlanCards = document.querySelectorAll(".plan-growth, .plan-enterprise");
+    allPlanCards.forEach(card => card.style.display = "none");
+
+    if (activePlan === "growth") {
+      document.querySelectorAll(".plan-growth").forEach(card => card.style.display = "block");
     }
 
-    /* waitlist forms -> Formspree + success state (keeps mailto fallback) */
-    document.querySelectorAll("form.waitlist").forEach(function(form){
-      form.addEventListener("submit", function(e){
-        e.preventDefault();
-        if(!form.checkValidity()){ form.reportValidity(); return; }
-        var success = form.parentElement.querySelector(".form-success");
-        var action = form.getAttribute("action") || "";
-        function showSuccess(){ form.classList.add("hide"); if(success) success.classList.add("on"); }
-        if(action.indexOf("YOUR_FORM_ID") !== -1){ showSuccess(); return; } /* placeholder: show success locally until the real Formspree ID is added */
-        fetch(action, { method:"POST", body:new FormData(form), headers:{ "Accept":"application/json" } })
-          .then(function(r){ if(r.ok){ showSuccess(); } else { window.location.href = "mailto:credibles.inc@gmail.com?subject=Join%20the%20Credibles%20Waitlist"; } })
-          .catch(function(){ window.location.href = "mailto:credibles.inc@gmail.com?subject=Join%20the%20Credibles%20Waitlist"; });
-      });
+    if (activePlan === "enterprise") {
+      document.querySelectorAll(".plan-growth, .plan-enterprise").forEach(card => card.style.display = "block");
+    }
+  }
+
+  function resetButtons() {
+    document.querySelectorAll(".vuln-actions button").forEach(btn => {
+      btn.disabled = false;
+      btn.innerText = "Auto Fix";
+      btn.style.background = "";
+      btn.style.color = "";
+      btn.style.borderColor = "";
     });
-  </script>
+  }
 
-  <script>
-    /* ===== Interactive demo ===== */
-    var activePlan = "starter";
-    var totalFixable = 0, fixedCount = 0;
+  function fixVuln(button, vulnId) {
+    if (button.disabled) return;
 
-    var planData = {
-      starter:    { label:"Starter • $100/mo",    risk:"Critical", score:42, total:3, autoFix:false, finalScore:42, finalLevel:"Critical",
-        compliance:"Basic security summary",
-        features:["Basic vulnerability detection","Severity classification","Core security summary"],
-        show:[] },
-      growth:     { label:"Growth • $450/mo",      risk:"High",     score:58, total:4, autoFix:false, finalScore:58, finalLevel:"High",
-        compliance:"Advanced monitoring summary",
-        features:["Continuous monitoring","Expanded attack vector coverage","Advanced threat detection","Enhanced reporting"],
-        show:["plan-growth"] },
-      pro:        { label:"Pro • $1,500/mo",       risk:"High",     score:42, total:5, autoFix:true,  finalScore:91, finalLevel:"Low Risk",
-        compliance:"Compliance reporting: GDPR, ISO 27001, SOC 2",
-        features:["Automated fixing workflows","Compliance reporting","Continuous monitoring","Advanced threat intelligence"],
-        show:["plan-growth","plan-pro"] },
-      enterprise: { label:"Enterprise • $11,000/mo", risk:"High",   score:42, total:6, autoFix:true,  finalScore:96, finalLevel:"Protected",
-        compliance:"Compliance reporting: GDPR, ISO 27001, SOC 2",
-        features:["Automated vulnerability fixing","Threat intelligence integration","Compliance reporting","Continuous monitoring","Priority support","Advanced enterprise security workflows"],
-        show:["plan-growth","plan-pro","plan-enterprise"] }
-    };
+    button.disabled = true;
+    button.innerText = "Fixed";
+    button.style.background = "#16a34a";
+    button.style.color = "white";
+    button.style.borderColor = "#16a34a";
 
-    function animateNumber(el, to){
-      if(window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches){ el.innerText = to; return; }
-      var from = parseInt(el.innerText,10); if(isNaN(from)) from = 0;
-      var start = performance.now(), dur = 900;
-      function step(t){
-        var p = Math.min((t-start)/dur,1);
-        el.innerText = Math.round(from + (to-from)*(1-Math.pow(1-p,3)));
-        if(p<1) requestAnimationFrame(step);
-      }
-      requestAnimationFrame(step);
+    fixedCount += 1;
+    document.getElementById("resolvedCount").innerText = fixedCount + " / " + totalFixable;
+
+    if (fixedCount >= totalFixable) {
+      const finalScore = activePlan === "starter" ? 86 : activePlan === "growth" ? 91 : 96;
+      const finalLevel = activePlan === "starter" ? "Medium Risk" : activePlan === "growth" ? "Low Risk" : "Protected";
+
+      document.getElementById("finalScore").innerText = finalScore;
+      document.getElementById("finalLevel").innerText = finalLevel;
+      document.getElementById("finalReportBox").style.display = "block";
+      document.getElementById("scanStatus").innerText = "All visible issues resolved. Report updated.";
+      document.getElementById("securityScore").innerText = finalScore;
+      document.getElementById("riskLevel").innerText = finalLevel;
+      document.getElementById("riskLevel").className = "demo-big-text protected";
     }
-
-    function updatePlanVisibility(){
-      document.querySelectorAll(".plan-growth,.plan-pro,.plan-enterprise").forEach(function(c){ c.style.display="none"; });
-      (planData[activePlan].show||[]).forEach(function(cls){
-        document.querySelectorAll("."+cls).forEach(function(c){ c.style.display="block"; });
-      });
-    }
-
-    function resetButtons(){
-      document.querySelectorAll(".vuln-actions button").forEach(function(btn){
-        btn.disabled=false; btn.innerText="Auto Fix"; btn.style.background=""; btn.style.color=""; btn.style.borderColor="";
-      });
-    }
-
-    function applyAutoFixGate(){
-      var cfg = planData[activePlan];
-      document.querySelectorAll(".vuln-actions button").forEach(function(btn){
-        if(cfg.autoFix){ btn.disabled=false; btn.innerText="Auto Fix"; }
-        else { btn.disabled=true; btn.innerText="Pro & Enterprise"; }
-      });
-    }
-
-    function startScan(){
-      var target = (document.getElementById("urlInput").value||"").trim() || "example.com";
-      activePlan = document.getElementById("planSelect").value;
-      var cfg = planData[activePlan];
-      fixedCount = 0;
-      totalFixable = cfg.autoFix ? cfg.total : 0;
-
-      document.getElementById("scanStatus").innerText = "Scanning target...";
-      document.getElementById("dashboard").style.display = "none";
-      document.getElementById("finalReportBox").style.display = "none";
-      resetButtons();
-      updatePlanVisibility();
-
-      setTimeout(function(){
-        document.getElementById("scanStatus").innerText = "Scan complete. Vulnerabilities detected.";
-        document.getElementById("dashboard").style.display = "block";
-
-        var scoreEl = document.getElementById("securityScore");
-        scoreEl.innerText = 42; animateNumber(scoreEl, cfg.score);
-        document.getElementById("riskLevel").innerText = cfg.risk;
-        document.getElementById("riskLevel").className = "demo-big-text " + cfg.risk.toLowerCase().replace(" ","-");
-        document.getElementById("vulnCount").innerText = cfg.total;
-
-        document.getElementById("reportPlan").innerText = cfg.label;
-        document.getElementById("reportTarget").innerText = target;
-        document.getElementById("reportRisk").innerText = cfg.risk;
-        document.getElementById("resolvedCount").innerText = cfg.autoFix ? ("0 / " + cfg.total) : "Auto-fix on Pro & Enterprise";
-        document.getElementById("complianceText").innerText = cfg.compliance;
-
-        var fl = document.getElementById("planFeatures"); fl.innerHTML = "";
-        cfg.features.forEach(function(f){ var li=document.createElement("li"); li.innerText=f; fl.appendChild(li); });
-
-        applyAutoFixGate();
-      }, 1500);
-    }
-
-    function fixVuln(button){
-      if(button.disabled) return;
-      var cfg = planData[activePlan];
-      if(!cfg.autoFix) return;
-
-      button.disabled = true; button.innerText = "Fixed";
-      button.style.background = "#22c55e"; button.style.color = "#06230f"; button.style.borderColor = "#22c55e";
-
-      fixedCount += 1;
-      document.getElementById("resolvedCount").innerText = fixedCount + " / " + totalFixable;
-
-      if(fixedCount >= totalFixable){
-        document.getElementById("finalScore").innerText = cfg.finalScore;
-        document.getElementById("finalLevel").innerText = cfg.finalLevel;
-        document.getElementById("finalReportBox").style.display = "block";
-        document.getElementById("scanStatus").innerText = "All visible issues resolved. Report updated.";
-        var scoreEl = document.getElementById("securityScore");
-        animateNumber(scoreEl, cfg.finalScore);
-        document.getElementById("riskLevel").innerText = cfg.finalLevel;
-        document.getElementById("riskLevel").className = "demo-big-text protected";
-      }
-    }
-  </script>
+  }
+</script>
 </body>
 </html>
